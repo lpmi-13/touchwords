@@ -3,7 +3,6 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preloa
 
 
 function preload() {
-  game.scale.pageAlignHorizontally = true;
 
   game.load.image('background', 'static/assets/images/stones.png');
 
@@ -26,7 +25,8 @@ function create() {
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
   game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-  game.scale.refresh();
+  game.scale.pageAlignHorizontally = true;
+  game.scale.pageAlignHorizontally = false;
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -110,6 +110,7 @@ function create() {
       }
   }
 
+  game.scale.refresh();
  // game.input.onUp.add(function() {
  //   console.log("up");
  // });
