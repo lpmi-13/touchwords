@@ -1,7 +1,7 @@
 var width = screen.width;
 var height = screen.height;
 
-var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
+var game = new Phaser.Game(width*.8, height*.8, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
 
 
 
@@ -20,16 +20,14 @@ var wordPool;
 function create() {
   game.stage.backgroundColor = 0xbdbdbd;
 
-  game.add.tileSprite(0, 0, width*.8, height*.6, 'background');
-  scoreText = game.add.text(5,5, 'Points: 0', {font: '28px Arial', fill: '#0095DD'});
-  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '28px Arial', fill: '#0095DD'});
+  game.add.tileSprite(0, 0, width*.8, height*.8, 'background');
+  scoreText = game.add.text(5,5, 'Points: 0', {font: '18px Arial', fill: '#0095DD'});
+  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '18px Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
 
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
   game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-  console.log("screen height is " + screen.height);
-  console.log("screen width is " + screen.width);
 
   game.scale.pageAlignHorizontally = true;
   game.scale.pageAlignVertically = true;
@@ -76,7 +74,7 @@ function create() {
   var length = words.length;
   function createWord() {
 	var randomNumber = game.rnd.integerInRange(0,length-1);
-	var word = game.add.text(game.world.randomX, 500, words[randomNumber], { font: "32px Arial Black", fill: "#c51b7d"}, wordPool);
+	var word = game.add.text(game.world.randomX, height, words[randomNumber], { font: "22px Arial Black", fill: "#c51b7d"}, wordPool);
 	word.stroke = "d377ae";
 	word.strokeThickness = 6;
 	word.setShadow(2,2, "#333333", 2, true, false);
@@ -146,8 +144,8 @@ var loadState = {
   create: function() {
     console.log('Loadstate');
 
-    var instructionsText = game.add.text(30,50, instructions, {font: '35px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 580});
-    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "35px Arial White", fill: '#0095DD'});
+    var instructionsText = game.add.text(30,50, instructions, {font: '25px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 500});
+    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "25px Arial White", fill: '#0095DD'});
 
 //  var wkey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 //  wkey.onDown.addOnce(this.start, this);
@@ -176,8 +174,8 @@ var playState = {
 var loseState = {
   create: function() {
     console.log('loseState');
-    var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'48px Arial White',fill:'#0095DD'});
-    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font:'32px Arial White',fill:'#0095DD'});  
+    var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'28px Arial White',fill:'#0095DD'});
+    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font:'22px Arial White',fill:'#0095DD'});  
 
 //    var wkey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 //    wkey.onDown.addOnce(this.start, this);
