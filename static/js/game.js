@@ -39,31 +39,6 @@ function create() {
   wordPool.setAll('outOfBoundsKill', true);
   wordPool.setAll('checkWorldbounds', true);
 
-  var verbs = {
-	'walked':{regular:true},
-	'talked':{regular:true},
-	'asked':{regular:true},
-	'touched':{regular:true},
-	'sayed':{regular:false},
-	'getted':{regular:false},
-	'goed':{regular:false},
-	'wanted':{regular:true},
-	'believed':{regular:true},
-	'eated':{regular:false},
-	'basked':{regular:true},
-	'discussed':{regular:true},
-	'knowed':{regular:false},
-	'thinked':{regular:false},
-	'comed':{regular:false},
-	'started':{regular:true},
-	'chatted':{regular:true},
-	'brewed':{regular:true},
-	'seed':{regular:false},
-	'taked':{regular:false},
-	'chewed':{regular:true}
-  }
-
-
   var words = Object.keys(verbs);
   var length = words.length;
   function createWord() {
