@@ -1,4 +1,7 @@
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
+var width = screen.width;
+var height = screen.height;
+
+var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
 
 
 
@@ -17,7 +20,7 @@ var wordPool;
 function create() {
   game.stage.backgroundColor = 0xbdbdbd;
 
-  game.add.tileSprite(0, 0, 800, 600, 'background');
+  game.add.tileSprite(0, 0, width*.8, height*.6, 'background');
   scoreText = game.add.text(5,5, 'Points: 0', {font: '28px Arial', fill: '#0095DD'});
   livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '28px Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
@@ -25,8 +28,11 @@ function create() {
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
   game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+  console.log("screen height is " + screen.height);
+  console.log("screen width is " + screen.width);
+
   game.scale.pageAlignHorizontally = true;
-  game.scale.pageAlignHorizontally = false;
+  game.scale.pageAlignVertically = true;
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
