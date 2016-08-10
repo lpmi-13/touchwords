@@ -1,7 +1,7 @@
 var width = screen.width;
 var height = screen.height;
 
-var game = new Phaser.Game(width*.8, height*.8, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
+var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
 
 
 
@@ -20,7 +20,7 @@ var wordPool;
 function create() {
   game.stage.backgroundColor = 0xbdbdbd;
 
-  game.add.tileSprite(0, 0, width*.8, height*.8, 'background');
+  game.add.tileSprite(0, 0, width*.8, height*.6, 'background');
   scoreText = game.add.text(5,5, 'Points: 0', {font: '18px Arial', fill: '#0095DD'});
   livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '18px Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
