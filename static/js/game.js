@@ -25,12 +25,6 @@ function create() {
   livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '18px Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
 
-  game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-
-  game.scale.pageAlignHorizontally = true;
-  game.scale.pageAlignVertically = true;
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -144,7 +138,15 @@ var loadState = {
   create: function() {
     console.log('Loadstate');
 
-    var instructionsText = game.add.text(30,50, instructions, {font: '25px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 500});
+  game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+  
+  game.scale.pageAlignHorizontally = true;
+  game.scale.pageAlignVertically = true;
+  
+  game.scale.refresh();
+
+var instructionsText = game.add.text(30,50, instructions, {font: '25px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 500});
     var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "25px Arial White", fill: '#0095DD'});
 
 //  var wkey = game.input.keyboard.addKey(Phaser.Keyboard.W);
