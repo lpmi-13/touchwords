@@ -121,8 +121,8 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(30,50, instructions, {font: '25px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 500});
-    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "25px Arial White", fill: '#0095DD'});
+var instructionsText = game.add.text(30,50, instructions, {font: '25px Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 300});
+    var continueText = game.add.text(30, game.world.height - 250, "Press any key to continue...", {font: "25px Arial White", fill: '#0095DD'});
 
 //  var wkey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 //  wkey.onDown.addOnce(this.start, this);
