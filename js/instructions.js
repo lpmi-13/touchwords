@@ -1,1 +1,0 @@
-var instructions = "This is a game about identifying the irregular past tense verbs. When you see one, click it to make it disappear and get 10 points. Don't click the regular verbs, or you lose 1 life. Lose 3 lives, and the game is over!";
