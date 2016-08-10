@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.EXACT_FIT, 'text-example', { preload: preload, create: create, update: update});
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
 
 
@@ -22,6 +22,11 @@ function create() {
   scoreText = game.add.text(5,5, 'Points: 0', {font: '28px Arial', fill: '#0095DD'});
   livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '28px Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
+
+  game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+  game.scale.refresh();
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
