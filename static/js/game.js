@@ -53,7 +53,7 @@ function create() {
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
 
-	word.body.velocity.setTo(game.rnd.integerInRange(-300,300),game.rnd.integerInRange(-300,-100));
+	word.body.velocity.setTo(game.rnd.integerInRange(-150,150),game.rnd.integerInRange(-200,-100));
 	word.body.collideWorldBounds = true;
 	word.body.bounce.set(1);
 	return word;
