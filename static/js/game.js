@@ -21,8 +21,8 @@ function create() {
   game.stage.backgroundColor = 0xbdbdbd;
 
   game.add.tileSprite(0, 0, width*.8, height*.6, 'background');
-  scoreText = game.add.text(5,5, 'Points: 0', {font: '1em Arial', fill: '#0095DD'});
-  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1em Arial', fill: '#0095DD'});
+  scoreText = game.add.text(5,5, 'Points: 0', {font: '1.5em Arial', fill: '#0095DD'});
+  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1.5em Arial', fill: '#0095DD'});
   livesText.anchor.set(1,0);
 
 
@@ -45,7 +45,7 @@ function create() {
 	var randomNumber = game.rnd.integerInRange(0,length-1);
 	var word = game.add.text(game.world.randomX, height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
 	word.stroke = "d377ae";
-	word.strokeThickness = 6;
+	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
 	word.data = {
 		regular : verbs[words[randomNumber]].regular
@@ -84,13 +84,7 @@ function create() {
   }
 
   game.scale.refresh();
- // game.input.onUp.add(function() {
- //   console.log("up");
- // });
 
-  //game.input.onTap.add(function() {
-   // console.log("tap");
- // });
 }
 
 function update() {
@@ -121,7 +115,7 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth: 300});
+var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.8 });
     var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "1em Arial White", fill: '#0095DD'});
 
     game.input.onTap.addOnce(this.start, this);  
