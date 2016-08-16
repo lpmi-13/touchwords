@@ -143,7 +143,7 @@ var playState = {
 var loseState = {
   create: function() {
     console.log('loseState');
-    var instructionsText = game.add.text(height/2, 50, "GAME OVER", {font:'2.5em Arial White',fill:'#0095DD'});
+    var instructionsText = game.add.text(30, height/2, "GAME OVER", {font:'2.5em Arial White',fill:'#0095DD'});
     var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font:'1.5em Arial White',fill:'#0095DD'});  
 
       game.input.onTap.addOnce(this.start, this);
