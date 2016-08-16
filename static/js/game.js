@@ -115,7 +115,7 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.8 });
+var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.6 });
     var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "1em Arial White", fill: '#0095DD'});
 
     game.input.onTap.addOnce(this.start, this);  
