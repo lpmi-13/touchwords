@@ -116,7 +116,7 @@ var loadState = {
   game.scale.refresh();
 
 var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.6 });
-    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font: "1em Arial White", fill: '#0095DD'});
+    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1em Arial White", fill: '#0095DD'});
 
     game.input.onTap.addOnce(this.start, this);  
 
@@ -144,7 +144,7 @@ var loseState = {
   create: function() {
     console.log('loseState');
     var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'2.5em Arial White',fill:'#0095DD'});
-    var continueText = game.add.text(30, game.world.height - 50, "Press any key to continue...", {font:'1.5em Arial White',fill:'#0095DD'});  
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue...", {font:'1.5em Arial White',fill:'#0095DD'});  
 
       game.input.onTap.addOnce(this.start, this);
   },
