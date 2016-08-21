@@ -6,11 +6,14 @@ var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { pr
 
 
 function preload() {
+  game.load.text('leveldata', 'static/js/levels.json');
 
-  game.load.image('background', 'static/assets/images/voodoo_cactus_island.png');
-
+  game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island.png');
+  game.load.image('level2Background', 'static/assets/images/fishbgexp.jpg');
+  game.load.image('level3Background', 'static/assets/images/cloudsinthedesert.png');
 }
 
+var level = 0
 var scoreText;
 var score = 0;
 var livesText;
@@ -18,11 +21,14 @@ var lives = 3;
 var wordPool;
 
 function create() {
-  game.stage.backgroundColor = 0xbdbdbd;
+  game.levelData = JSON.parse(game.cache.getText('leveldata')); 
+  var levelVars = game.levelData.levelVariables[level];
 
-  game.add.tileSprite(0, 0, width*.8, height*.6, 'background');
-  scoreText = game.add.text(5,5, 'Points: 0', {font: '1.5em Arial', fill: '#0095DD'});
-  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1.5em Arial', fill: '#0095DD'});
+  game.stage.backgroundColor = '#1A1A1A';
+
+  game.add.tileSprite(0, 0, width*.8, height*.6, levelVars.background);
+  scoreText = game.add.text(5,5, 'Points: 0', {font: '1.8em Georgia', fill: '#0095DD'});
+  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1.8em Georgia', fill: '#0095DD'});
   livesText.anchor.set(1,0);
 
 
@@ -53,7 +59,7 @@ function create() {
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
 
-	word.body.velocity.setTo(game.rnd.integerInRange(-150,150),game.rnd.integerInRange(-200,-100));
+	word.body.velocity.setTo(game.rnd.integerInRange(levelVars.velocityXlower,levelVars.velocityXhigher),game.rnd.integerInRange(levelVars.velocityYlower,levelVars.velocityYhigher));
 	word.body.collideWorldBounds = true;
 	word.body.bounce.set(1);
 	return word;
@@ -62,14 +68,17 @@ function create() {
 
   game.physics.arcade.checkCollision.down = false;
 
-  game.time.events.loop(2000, createWord, this);
+  game.time.events.loop(levelVars.timeToSpawn, createWord, this);
 
 
   function test(sprite, pointer) {
       if (!sprite.data.regular) {
   	  score += 10;
 	  scoreText.setText('Points: ' + score);	  
-	  if (score == 100) {
+	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
+  game.state.start('win');
+} else if (score == levelVars.mustScore)
+ {
 	    game.state.start('levelUp');
 	  }
 	  sprite.kill();
@@ -118,8 +127,8 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(30,50, instructions, {font: '2em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.6 });
-    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Arial White", fill: '#0095DD'});
+var instructionsText = game.add.text(30,50, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
+    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
 
     game.input.onTap.addOnce(this.start, this);  
 
@@ -142,12 +151,13 @@ var playState = {
   }
 };
 
-var winState = {
+var progressState = {
   create: function() {
+    level++;
     console.log('Level Up!!');
-    var congratsText = game.add.text(30, 50, "You passed the level!!", {font: '2.5em Arial Green',fill: '#0095DD'});
-    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Arial Green',fill: '#0095DD'});
-
+    game.stage.backgroundColor = "#1A1A1A";
+    var congratsText = game.add.text(30, 50, "You passed the level!!", {font: '2.5em Georgia',fill: '#0095DD'});
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Georgia',fill: '#0095DD'});
     game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
@@ -155,15 +165,31 @@ var winState = {
   }
 };
 
+var winState = {
+  create: function() {
+    console.log('winState');
+    game.stage.backgroundColor = '#1A1A1A';
+    var winText = game.add.text(30,50, "YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD'});
+    var continueText = game.add.text(30, game.world.height -50, "Touch the scrreen to play again...", {font:'1.5em Georgia', fill: '#0095DD'});
+    game.input.onTap.addOnce(this.start, this);
+  },
+  start: function() {
+    level = 0;
+    game.state.start('play');
+  }
+};
+
+
 var loseState = {
   create: function() {
     console.log('loseState');
-    var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'2.5em Arial White',fill:'#0095DD'});
-    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Arial White',fill:'#0095DD'});  
-
+    game.stage.backgroundColor = '#1A1A1A';
+    var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'2.5em Georgia',fill:'#0095DD'});
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Georgia',fill:'#0095DD'});  
       game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
+    level = 0;
     game.state.start('play');
   }
 };
@@ -171,7 +197,8 @@ var loseState = {
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
 game.state.add('play', playState);
-game.state.add('levelUp', winState);
+game.state.add('levelUp', progressState);
+game.state.add('win', winState);
 game.state.add('lose', loseState);
 
 game.state.start('boot');

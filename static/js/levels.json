@@ -1,0 +1,32 @@
+{
+	"levelVariables": 
+    [
+	{ "title": "level1",
+	  "background": "level1Background",
+	  "mustScore": 10,
+	  "velocityXlower": -150,
+	  "velocityXhigher": 150,
+	  "velocityYlower": -200,
+	  "velocityYhigher": -100, 
+	  "timeToSpawn": 3000
+	},
+	{ "title": "level2",
+	  "background": "level2Background",
+	  "mustScore": 20,
+	  "velocityXlower": -200,
+	  "velocityXhigher": 200,
+	  "velocityYlower": -300,
+	  "velocityYhigher": -200,
+	  "timeToSpawn": 2000 
+	},
+	{ "title": "level3",
+	  "background": "level3Background",
+	  "mustScore": 30,
+	  "velocityXlower": -300,
+	  "velocityXhigher": 300,
+	  "velocityYlower": -400,
+	  "velocityYhigher": -300,
+	  "timeToSpawn": 1000 
+	}
+    ]
+}
