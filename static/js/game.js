@@ -157,7 +157,7 @@ var progressState = {
     console.log('Level Up!!');
     game.stage.backgroundColor = "#1A1A1A";
     var congratsText = game.add.text(30, 50, "You passed the level!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
-    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
     game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
@@ -170,7 +170,7 @@ var winState = {
     console.log('winState');
     game.stage.backgroundColor = '#1A1A1A';
     var winText = game.add.text(30,50, "YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD'});
-    var continueText = game.add.text(30, game.world.height -50, "Touch the screen to play again...", {font:'1.5em Georgia', fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.75 });
+    var continueText = game.add.text(30, game.world.height -50, "Touch the screen to play again...", {font:'1.5em Georgia', fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.65 });
     game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
@@ -185,7 +185,7 @@ var loseState = {
     console.log('loseState');
     game.stage.backgroundColor = '#1A1A1A';
     var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'2.5em Georgia',fill:'#0095DD'});
-    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth:width*.75});  
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth:width*.65});  
       game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
