@@ -7,7 +7,7 @@ var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { pr
 
 function preload() {
 
-  game.load.image('background', 'static/assets/images/stones.png');
+  game.load.image('background', 'static/assets/images/voodoo_cactus_island.png');
 
 }
 
@@ -69,6 +69,9 @@ function create() {
       if (!sprite.data.regular) {
   	  score += 10;
 	  scoreText.setText('Points: ' + score);	  
+	  if (score == 100) {
+	    game.state.start('levelUp');
+	  }
 	  sprite.kill();
       } else {
 	  loseLife();
@@ -115,8 +118,8 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(30,50, instructions, {font: '1em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.6 });
-    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1em Arial White", fill: '#0095DD'});
+var instructionsText = game.add.text(30,50, instructions, {font: '2em Arial White', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.6 });
+    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Arial White", fill: '#0095DD'});
 
     game.input.onTap.addOnce(this.start, this);  
 
@@ -139,6 +142,18 @@ var playState = {
   }
 };
 
+var winState = {
+  create: function() {
+    console.log('Level Up!!');
+    var congratsText = game.add.text(30, 50, "You passed the level!!", {font: '2.5em Arial Green',fill: '#0095DD'});
+    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Arial Green',fill: '#0095DD'});
+
+    game.input.onTap.addOnce(this.start, this);
+  },
+  start: function() {
+    game.state.start('play');
+  }
+};
 
 var loseState = {
   create: function() {
@@ -156,6 +171,7 @@ var loseState = {
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
 game.state.add('play', playState);
+game.state.add('levelUp', winState);
 game.state.add('lose', loseState);
 
 game.state.start('boot');
