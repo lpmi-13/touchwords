@@ -4,15 +4,17 @@ var height = screen.height;
 var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
 
 
-
 function preload() {
   game.load.text('leveldata', 'static/js/levels.json');
 
   game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island.png');
   game.load.image('level2Background', 'static/assets/images/fishbgexp.jpg');
   game.load.image('level3Background', 'static/assets/images/cloudsinthedesert.png');
+  game.load.image('diamond', 'static/assets/images/diamond.png');
 }
 
+
+var emitter;
 var level = 0
 var scoreText;
 var score = 0;
@@ -23,6 +25,7 @@ var wordPool;
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
   var levelVars = game.levelData.levelVariables[level];
+
 
   game.stage.backgroundColor = '#1A1A1A';
 
@@ -70,9 +73,13 @@ function create() {
 
   game.time.events.loop(levelVars.timeToSpawn, createWord, this);
 
+  emitter = game.add.emitter(0,0,100);
+  emitter.makeParticles('diamond');
+  emitter.gravity = 200;
 
   function test(sprite, pointer) {
       if (!sprite.data.regular) {
+	  diamondBurst(sprite);
   	  score += 10;
 	  scoreText.setText('Points: ' + score);	  
 	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
@@ -85,6 +92,19 @@ function create() {
       } else {
 	  loseLife();
       }
+  }
+
+  function diamondBurst(sprite) {
+    emitter.x = sprite.x;
+    emitter.y = sprite.y;
+
+    emitter.start(true, 3000, null, 10);
+
+    //game.time.events.add(2000, destroyEmitter, this);
+  }
+
+  function destroyEmitter() {
+    emitter.destroy();
   }
 
   function loseLife() {
