@@ -90,8 +90,13 @@ function create() {
 	  }
 	  sprite.kill();
       } else {
+	  flash();
 	  loseLife();
       }
+  }
+
+  function flash() {
+    game.camera.flash(0xff0000,500);
   }
 
   function diamondBurst(sprite) {
@@ -103,6 +108,8 @@ function create() {
     //game.time.events.add(2000, destroyEmitter, this);
   }
 
+
+//this function breaks everything, so not calling it
   function destroyEmitter() {
     emitter.destroy();
   }
