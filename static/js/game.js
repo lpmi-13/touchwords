@@ -139,7 +139,7 @@ var bootState = {
 
     /* this was a mistake, using height instead of width, but
        it seems to work, so leaving it for now */
-    game.add.text(game.world.height/2, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;  
@@ -149,7 +149,7 @@ var bootState = {
   create: function() {
     console.log("Bootstate");
 
-    game.add.sprite(30,25,'logo');
+    game.add.sprite(0,0,'logo');
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.input.onTap.addOnce(this.start, this);
   },
