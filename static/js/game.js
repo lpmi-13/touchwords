@@ -97,6 +97,7 @@ function create() {
 
   function flash() {
     game.camera.flash(0xff0000,500);
+    game.camera.shake(0.05,500);
   }
 
   function diamondBurst(sprite) {
