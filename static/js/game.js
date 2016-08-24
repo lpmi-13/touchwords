@@ -135,12 +135,26 @@ function update() {
 var bootState = {
   
   preload: function() {
-    game.add.text(game.world.width/2, game.world.height/2, 'loading...', {font: "3em Georgia", fill: '#0095DD'});
-  },
+    game.load.image('logo','static/assets/images/logo.png');
+
+    /* this was a mistake, using height instead of width, but
+       it seems to work, so leaving it for now */
+    game.add.text(game.world.height/2, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;  
+
+},
 
   create: function() {
     console.log("Bootstate");
+
+    game.add.sprite(game.world.height/2,0,'logo');
     game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.input.onTap.addOnce(this.start, this);
+  },
+
+  start: function() {
     game.state.start('load');
   }
 };
