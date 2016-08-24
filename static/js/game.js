@@ -133,6 +133,11 @@ function update() {
 }
 
 var bootState = {
+  
+  preload: function() {
+    game.add.text(game.world.width/2, game.world.height/2, 'loading...', {font: "3em Georgia", fill: '#0095DD'});
+  },
+
   create: function() {
     console.log("Bootstate");
     game.physics.startSystem(Phaser.Physics.ARCADE);
