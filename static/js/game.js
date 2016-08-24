@@ -149,7 +149,7 @@ var bootState = {
   create: function() {
     console.log("Bootstate");
 
-    game.add.sprite(game.world.height/2,0,'logo');
+    game.add.sprite(30,25,'logo');
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.input.onTap.addOnce(this.start, this);
   },
