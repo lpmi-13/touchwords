@@ -69,7 +69,6 @@ background.tileScale.y = resizeY;
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
   wordPool = game.add.group();
   wordPool.enableBody = true;
   wordPool.physicsBodytype = Phaser.Physics.ARCADE;
@@ -151,8 +150,18 @@ background.tileScale.y = resizeY;
       lives--;
       livesText.setText('Lives: ' + lives);
       if (!lives) {
-        game.state.start('lose');
+	console.log('should fade here');
+        startFade();
       }
+  }
+
+  function startFade() {
+    game.camera.fade(0x000000, 1000,true);
+    game.time.events.add(1000,fadeComplete, this);
+  }
+
+  function fadeComplete() {
+     game.state.start('lose');
   }
 
   game.scale.refresh();
