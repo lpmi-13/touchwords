@@ -181,7 +181,12 @@ var bootState = {
     console.log("Bootstate");
     logAllThings();
     if (portrait){
-      game.add.sprite(0,0,'logo');
+      var logoWidth = 296;
+      var logoHeight = 207;
+      var gameLogo = game.add.sprite(0,0,'logo');
+      var resizeX = game.world.width/logoWidth;
+      var resizeY = game.world.height/logoHeight;
+      gameLogo.scale.setTo(resizeX,resizeY);
       game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
       game.input.onTap.addOnce(this.start, this);
     } else {
