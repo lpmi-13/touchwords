@@ -1,6 +1,23 @@
 var width = screen.width;
 var height = screen.height;
 
+var portrait = checkOrientation(width, height)
+
+function logAllThings() {
+  console.log('the screen width is ' + screen.width);
+  console.log('the screen height is ' + screen.height);
+  console.log('the game world width is ' + game.world.width);
+  console.log('the game world height is ' + game.world.height);
+}
+
+function checkOrientation(width, height) {
+  if (height > width) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
 
 
@@ -26,10 +43,25 @@ function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
   var levelVars = game.levelData.levelVariables[level];
 
+console.log(levelVars);
 
   game.stage.backgroundColor = '#1A1A1A';
 
-  game.add.tileSprite(0, 0, width*.8, height*.6, levelVars.background);
+var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
+
+var resizeX = game.world.width/levelVars.backgroundWidth;
+var resizeY = game.world.height/levelVars.backgroundHeight;
+
+logAllThings();
+console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
+console.log('the backgroundHeight = ' + levelVars.backgroundHeight);
+
+console.log('resizeX = ' + resizeX);
+console.log('resizeY = ' + resizeY);
+
+background.tileScale.x = resizeX;
+background.tileScale.y = resizeY;
+
   scoreText = game.add.text(5,5, 'Points: 0', {font: '1.8em Georgia', fill: '#0095DD'});
   livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1.8em Georgia', fill: '#0095DD'});
   livesText.anchor.set(1,0);
@@ -96,15 +128,15 @@ function create() {
   }
 
   function flash() {
-    game.camera.flash(0xff0000,500);
-    game.camera.shake(0.05,500);
+    game.camera.flash(0xff0000,300);
+    game.camera.shake(0.05,300);
   }
 
   function diamondBurst(sprite) {
     emitter.x = sprite.x;
     emitter.y = sprite.y;
 
-    emitter.start(true, 3000, null, 10);
+    emitter.start(true, 2000, null, 10);
 
     //game.time.events.add(2000, destroyEmitter, this);
   }
@@ -139,7 +171,6 @@ var bootState = {
 
     /* this was a mistake, using height instead of width, but
        it seems to work, so leaving it for now */
-    game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;  
@@ -148,10 +179,16 @@ var bootState = {
 
   create: function() {
     console.log("Bootstate");
-
-    game.add.sprite(0,0,'logo');
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.input.onTap.addOnce(this.start, this);
+    logAllThings();
+    if (portrait){
+      game.add.sprite(0,0,'logo');
+      game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    } else {
+      game.add.sprite(width*.25,0,'logo');
+      game.add.text(width*.3, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+//      game.physics.startSystem(Phaser.Physics.ARCADE);
+      game.input.onTap.addOnce(this.start, this);
+    }
   },
 
   start: function() {
@@ -175,8 +212,12 @@ var loadState = {
   game.scale.refresh();
 
 var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
-    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
 
+  if (portrait){
+    var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+  } else {
+    var continueText = game.add.text(width*.3, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+  }
     game.input.onTap.addOnce(this.start, this);  
 
 },
