@@ -183,10 +183,10 @@ var bootState = {
     if (portrait){
       game.add.sprite(0,0,'logo');
       game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+      game.input.onTap.addOnce(this.start, this);
     } else {
       game.add.sprite(width*.25,0,'logo');
       game.add.text(width*.3, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-//      game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onTap.addOnce(this.start, this);
     }
   },
