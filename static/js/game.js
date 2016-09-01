@@ -130,7 +130,13 @@ background.tileScale.y = resizeY;
 
   function levelUpTransition() {
     wordPool.callAll('kill');
-    levelUpText = game.add.text(game.world.centerX,-150, 'You passed the level!!!',{font:'8em Georgia',fill:'#0095DD'});
+
+    if (portrait) {
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2em Georgia',fill:'#0095DD'});
+    } else {
+      levelUpText = game.add.text(game.world.centerX,-150, 'You passed the level!!!',{font:'8em Georgia',fill:'#0095DD'});
+    }
+
     levelUpText.anchor.set(0.5);
     var tweenTransition = game.add.tween(levelUpText).to( { y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
     game.time.events.pause();
