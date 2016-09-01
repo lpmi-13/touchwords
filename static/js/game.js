@@ -255,6 +255,7 @@ var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia
 
   if (portrait){
     var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+    game.input.onTap.addOnce(this.start, this);  
   } else { 
     var continueText = game.add.text(game.camera.width/2, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
     game.input.onTap.addOnce(this.start, this);  
