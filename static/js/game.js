@@ -10,6 +10,8 @@ function logAllThings() {
   console.log('the game world height is ' + game.world.height);
 }
 
+
+
 function checkOrientation(width, height) {
   if (height > width) {
     return true;
@@ -30,9 +32,8 @@ function preload() {
   game.load.image('diamond', 'static/assets/images/diamond.png');
 }
 
-
 var emitter;
-var level = 0
+var level = 0;
 var scoreText;
 var score = 0;
 var livesText;
@@ -56,8 +57,6 @@ logAllThings();
 console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
 console.log('the backgroundHeight = ' + levelVars.backgroundHeight);
 
-console.log('resizeX = ' + resizeX);
-console.log('resizeY = ' + resizeY);
 
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
@@ -102,7 +101,11 @@ background.tileScale.y = resizeY;
 
   game.physics.arcade.checkCollision.down = false;
 
-  game.time.events.loop(levelVars.timeToSpawn, createWord, this);
+  if (level > 0) {
+    game.time.events.resume();
+  }
+
+  var spawnLoop = game.time.events.loop(levelVars.timeToSpawn, createWord, this);
 
   emitter = game.add.emitter(0,0,100);
   emitter.makeParticles('diamond');
@@ -115,15 +118,32 @@ background.tileScale.y = resizeY;
 	  scoreText.setText('Points: ' + score);	  
 	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
   game.state.start('win');
-} else if (score == levelVars.mustScore)
- {
-	    game.state.start('levelUp');
+          } else if (score == levelVars.mustScore) {
+	      levelUpTransition();
 	  }
 	  sprite.kill();
       } else {
 	  flash();
 	  loseLife();
       }
+  }
+
+  function levelUpTransition() {
+    wordPool.callAll('kill');
+    levelUpText = game.add.text(game.world.centerX,-150, 'You passed the level!!!',{font:'8em Georgia',fill:'#0095DD'});
+    levelUpText.anchor.set(0.5);
+    var tweenTransition = game.add.tween(levelUpText).to( { y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
+    game.time.events.pause();
+    tweenTransition.onComplete.add(startProgressFade, this);
+  }
+
+  function  startProgressFade() {
+    game.camera.fade(0x000000, 1500, true);
+    game.camera.onFadeComplete.add(progressFadeComplete,this); 
+ }
+
+  function progressFadeComplete() {
+    game.state.start('levelUp');
   }
 
   function flash() {
@@ -135,7 +155,7 @@ background.tileScale.y = resizeY;
     emitter.x = sprite.x;
     emitter.y = sprite.y;
 
-    emitter.start(true, 2000, null, 10);
+    emitter.start(true, 1000, null, 5);
 
     //game.time.events.add(2000, destroyEmitter, this);
   }
@@ -150,17 +170,21 @@ background.tileScale.y = resizeY;
       lives--;
       livesText.setText('Lives: ' + lives);
       if (!lives) {
-	console.log('should fade here');
-        startFade();
+        startLoseFade();
       }
   }
 
-  function startFade() {
-    game.camera.fade(0x000000, 1000,true);
-    game.time.events.add(1000,fadeComplete, this);
+//  function startLevelUpFade() {
+//    wordPool.callCall('kill');
+//    }
+
+  function startLoseFade() {
+    game.camera.fade(0x000000, 1500,true);
+    wordPool.callAll('kill');
+    game.time.events.add(1500,loseFadeComplete, this);
   }
 
-  function fadeComplete() {
+  function loseFadeComplete() {
      game.state.start('lose');
   }
 
@@ -169,8 +193,7 @@ background.tileScale.y = resizeY;
 }
 
 function update() {
-
-
+  
 }
 
 var bootState = {
@@ -188,21 +211,24 @@ var bootState = {
 
   create: function() {
     console.log("Bootstate");
-    logAllThings();
+//    logAllThings();
     if (portrait){
       var logoWidth = 296;
       var logoHeight = 207;
       var gameLogo = game.add.sprite(0,0,'logo');
-      var resizeX = game.world.width/logoWidth;
-      var resizeY = game.world.height/logoHeight;
+     // gameLogo.anchor.set(0.5);
+      var resizeX = (game.world.width/logoWidth)/2;
+      var resizeY = (game.world.height/logoHeight)/2;
       gameLogo.scale.setTo(resizeX,resizeY);
-      game.add.text(30, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-      game.input.onTap.addOnce(this.start, this);
+      var touchToStart = game.add.text(30, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD',boundsAlignH: 'center'});
+      //touchToStart.setTextBounds(0,game.world.width,game.world.height,0);
     } else {
-      game.add.sprite(width*.25,0,'logo');
-      game.add.text(width*.3, game.world.height - 35, 'tap the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-      game.input.onTap.addOnce(this.start, this);
-    }
+      var gameLogo = game.add.sprite(game.world.centerX,0,'logo');
+      var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+      touchToStart.fixedToCamera = true;
+    }    
+    game.input.onTap.addOnce(this.start, this);
+    
   },
 
   start: function() {
@@ -225,15 +251,14 @@ var loadState = {
   
   game.scale.refresh();
 
-var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
+var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
   if (portrait){
     var continueText = game.add.text(30, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-  } else {
-    var continueText = game.add.text(width*.3, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-  }
+  } else { 
+    var continueText = game.add.text(game.camera.width/2, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
     game.input.onTap.addOnce(this.start, this);  
-
+  }
 },
   start: function() {
     game.state.start('play');
@@ -258,8 +283,7 @@ var progressState = {
     level++;
     console.log('Level Up!!');
     game.stage.backgroundColor = "#1A1A1A";
-    var congratsText = game.add.text(30, 50, "You passed the level!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.75 });
-    var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to continue to the next level!!!", {font: '1.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
+    var continueText = game.add.text(30, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
     game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
@@ -285,7 +309,7 @@ var winState = {
 var loseState = {
   create: function() {
     console.log('loseState');
-    game.stage.backgroundColor = '#1A1A1A';
+    game.stage.backgroundColor = 0x000000;
     var instructionsText = game.add.text(30, 50, "GAME OVER", {font:'2.5em Georgia',fill:'#0095DD'});
     var continueText = game.add.text(30, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth:width*.65});  
       game.input.onTap.addOnce(this.start, this);
@@ -304,3 +328,5 @@ game.state.add('win', winState);
 game.state.add('lose', loseState);
 
 game.state.start('boot');
+var width = screen.width;
+var height = screen.height;
