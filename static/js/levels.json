@@ -8,8 +8,8 @@
 	  "mustScore": 100,
 	  "velocityXlower": -150,
 	  "velocityXhigher": 150,
-	  "velocityYlower": -200,
-	  "velocityYhigher": -100, 
+	  "velocityYlower": -100,
+	  "velocityYhigher": -200, 
 	  "timeToSpawn": 3000
 	},
 	{ "title": "level2",
@@ -19,8 +19,8 @@
 	  "mustScore": 200,
 	  "velocityXlower": -200,
 	  "velocityXhigher": 200,
-	  "velocityYlower": -250,
-	  "velocityYhigher": -150,
+	  "velocityYlower": -150,
+	  "velocityYhigher": -250,
 	  "timeToSpawn": 2000 
 	},
 	{ "title": "level3",
@@ -30,8 +30,8 @@
 	  "mustScore": 300,
 	  "velocityXlower": -300,
 	  "velocityXhigher": 300,
-	  "velocityYlower": -300,
-	  "velocityYhigher": -200,
+	  "velocityYlower": -200,
+	  "velocityYhigher": -300,
 	  "timeToSpawn": 1000 
 	}
     ]
