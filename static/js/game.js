@@ -26,6 +26,8 @@ var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { pr
 function preload() {
   game.load.text('leveldata', 'static/js/levels.json');
 
+  game.load.image('heart', 'static/assets/images/Heart.png');
+
   game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island.png');
   game.load.image('level2Background', 'static/assets/images/fishbgexp.jpg');
   game.load.image('level3Background', 'static/assets/images/cloudsinthedesert.png');
@@ -36,10 +38,10 @@ var emitter;
 var level = 0;
 var scoreText;
 var score = 0;
-var livesText;
-var lives = 3;
+var livesPool;
 var wordPool;
 var scorePool;
+var heartPool;
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -63,9 +65,16 @@ background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
   scoreText = game.add.text(5,5, 'Points: 0/' + levelVars.mustScore , {font: '1.8em Georgia', fill: '#0095DD'});
-  livesText = game.add.text(game.world.width - 5, 5, 'Lives: ' + lives, {font: '1.8em Georgia', fill: '#0095DD'});
-  livesText.anchor.set(1,0);
 
+  heartPool = game.add.group();
+
+  for (var i = 1; i < 4; i++) {
+    heartSprite = game.add.sprite(game.world.width - (35*i), 5, 'heart');
+    heartSprite.scale.set(0.1,0.1);
+    heartPool.add(heartSprite);
+  }
+
+  var heartCount = heartPool.countLiving();
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -210,21 +219,20 @@ background.tileScale.y = resizeY;
 
 
 //this function breaks everything, so not calling it
-  function destroyEmitter() {
-    emitter.destroy();
-  }
+//  function destroyEmitter() {
+//    emitter.destroy();
+//  }
 
   function loseLife() {
-      lives--;
-      livesText.setText('Lives: ' + lives);
-      if (!lives) {
+      heartCount--;
+      var heart = heartPool.getFirstAlive();
+      heart.kill();
+      console.log(heartCount);
+      if (!heartCount) {
         startLoseFade();
       }
   }
 
-//  function startLevelUpFade() {
-//    wordPool.callCall('kill');
-//    }
 
   function startLoseFade() {
     game.camera.fade(0x000000, 1500,true);
@@ -263,7 +271,7 @@ var bootState = {
     if (portrait){
       var logoWidth = 296;
       var logoHeight = 207;
-      var gameLogo = game.add.sprite(0,0,'logo');
+      var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
       gameLogo.anchor.set(0.5);
       var resizeX = (game.world.width/logoWidth)/2;
       var resizeY = (game.world.height/logoHeight)/2;
@@ -303,7 +311,7 @@ var loadState = {
 var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
   if (portrait){
-    var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+    var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);  
   } else { 
@@ -347,7 +355,7 @@ var winState = {
   create: function() {
     console.log('winState');
     game.stage.backgroundColor = 0x000000;
-    var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD'});
+    var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth: width*.65});
     winText.anchor.set(0.5);
     var continueText = game.add.text(game.world.centerX, game.world.height -50, "Touch the screen to play again...", {font:'1.5em Georgia', fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
