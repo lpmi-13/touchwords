@@ -29,7 +29,6 @@ var verbs = {
 	'finded':{regular:false},
 	'telled':{regular:false},
 	'speaked':{regular:false},
-	'showed':{regular:false},
 	'leaved':{regular:false},
 	'feeled':{regular:false},
 	'putted':{regular:false},
