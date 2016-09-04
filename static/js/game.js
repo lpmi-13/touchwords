@@ -69,8 +69,8 @@ background.tileScale.y = resizeY;
   heartPool = game.add.group();
 
   for (var i = 4; i > 1; i--) {
-    heartSprite = game.add.sprite(game.world.width - (25*i), 5, 'heart');
-    heartSprite.scale.set(0.1,0.1);
+    heartSprite = game.add.sprite(game.world.width - (20*i), 5, 'heart');
+    heartSprite.scale.set(0.075,0.075);
     heartPool.add(heartSprite);
   }
 
@@ -271,7 +271,7 @@ var bootState = {
       var logoHeight = 207;
       var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
       gameLogo.anchor.set(0.5);
-      var resizeX = (game.world.width/logoWidth)/2;
+      var resizeX = (game.world.width/logoWidth);
       var resizeY = (game.world.height/logoHeight)/2;
       gameLogo.scale.setTo(resizeX,resizeY);
 
