@@ -68,8 +68,8 @@ background.tileScale.y = resizeY;
 
   heartPool = game.add.group();
 
-  for (var i = 1; i < 4; i++) {
-    heartSprite = game.add.sprite(game.world.width - (35*i), 5, 'heart');
+  for (var i = 4; i > 1; i--) {
+    heartSprite = game.add.sprite(game.world.width - (25*i), 5, 'heart');
     heartSprite.scale.set(0.1,0.1);
     heartPool.add(heartSprite);
   }
@@ -155,7 +155,7 @@ background.tileScale.y = resizeY;
   function winTransition() {
     wordPool.callAll('kill');
     if (portrait) {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2em Georgia',fill:'#0095DD'});
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
     } else {
       levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
     }
@@ -180,7 +180,7 @@ background.tileScale.y = resizeY;
     wordPool.callAll('kill');
 
     if (portrait) {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2em Georgia',fill:'#0095DD'});
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
     } else {
       levelUpText = game.add.text(game.world.centerX,-150, 'You passed the level!!!',{font:'8em Georgia',fill:'#0095DD'});
     }
@@ -227,7 +227,7 @@ background.tileScale.y = resizeY;
       heartCount--;
       var heart = heartPool.getFirstAlive();
       heart.kill();
-      console.log(heartCount);
+     
       if (!heartCount) {
         startLoseFade();
       }
@@ -257,8 +257,6 @@ var bootState = {
   preload: function() {
     game.load.image('logo','static/assets/images/logo.png');
 
-    /* this was a mistake, using height instead of width, but
-       it seems to work, so leaving it for now */
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;  
@@ -276,14 +274,19 @@ var bootState = {
       var resizeX = (game.world.width/logoWidth)/2;
       var resizeY = (game.world.height/logoHeight)/2;
       gameLogo.scale.setTo(resizeX,resizeY);
-      var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-      touchToStart.anchor.set(0.5);
+
     } else {
       var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
       gameLogo.anchor.set(0.5);
-      var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-      touchToStart.anchor.set(0.5);
-    }    
+    } 
+   
+    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    touchToStart.anchor.set(0.5);
+    
+    touchToStart.alpha = 1;
+    var textTween = game.add.tween(touchToStart).to( { alpha: 0 }, 500, "Linear", true, 1, -1);
+    textTween.yoyo(true, 500);
+    
     game.input.onTap.addOnce(this.start, this);
     
   },
