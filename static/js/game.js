@@ -23,8 +23,12 @@ function checkOrientation(width, height) {
   }
 }
 
-var game = new Phaser.Game(width*.8, height*.75, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
+if (portrait) {
+  var game = new Phaser.Game(width*.8,height*.7, Phaser.CANVAS, 'gameDiv', {preload: preload, create: create, update: update});
+  } else {
 
+  var game = new Phaser.Game(width*.8, height*.75, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
+  }
 
 function preload() {
   game.load.text('leveldata', 'static/js/levels.json');
