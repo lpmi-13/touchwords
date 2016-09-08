@@ -1,3 +1,6 @@
+//var w = window.innerWidth * window.devicePixelRatio;
+//var h = window.innerWidth * window.devicePixelRatio;
+
 var width = screen.width;
 var height = screen.height;
 
@@ -20,7 +23,7 @@ function checkOrientation(width, height) {
   }
 }
 
-var game = new Phaser.Game(width*.8, height*.6, Phaser.SHOW_ALL, 'gameDiv', { preload: preload, create: create, update: update});
+var game = new Phaser.Game(width*.8, height*.75, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
 
 function preload() {
@@ -53,8 +56,8 @@ console.log(levelVars);
 
 var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
 
-var resizeX = game.world.width/levelVars.backgroundWidth;
-var resizeY = game.world.height/levelVars.backgroundHeight;
+var resizeX = width/levelVars.backgroundWidth;
+var resizeY = height/levelVars.backgroundHeight;
 
 logAllThings();
 console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
@@ -109,7 +112,7 @@ background.tileScale.y = resizeY;
   var length = words.length;
   function createWord() {
 	var randomNumber = game.rnd.integerInRange(0,length-1);
-	var word = game.add.text(game.world.randomX, height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
+	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
 	word.stroke = "d377ae";
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
@@ -252,6 +255,11 @@ function update() {
   
 }
 
+//function render() {
+//  game.debug.inputInfo(32,32);
+//  game.debug.pointer(game.input.activePointer);
+//}
+
 var bootState = {
   
   preload: function() {
@@ -291,6 +299,10 @@ var bootState = {
     
   },
 
+  //render: function() {
+  //  game.debug.pointer(game.input.activePointer);
+  //},
+
   start: function() {
     game.state.start('load');
   }
@@ -325,7 +337,11 @@ var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia
 },
   start: function() {
     game.state.start('play');
-  }
+  },
+
+  //render: function() {
+  //  game.debug.cameraInfo(game.camera, 32, 32);
+  //}
 };
 
 
@@ -338,7 +354,11 @@ var playState = {
   },
   update: function() {
     update();
-  }
+  },
+
+  //render: function() {
+  //  render();
+  //}
 };
 
 var progressState = {
