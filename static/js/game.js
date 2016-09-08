@@ -60,8 +60,8 @@ console.log(levelVars);
 
 var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
 
-var resizeX = width/levelVars.backgroundWidth;
-var resizeY = height/levelVars.backgroundHeight;
+var resizeX = game.world.width/levelVars.backgroundWidth;
+var resizeY = game.world.height/levelVars.backgroundHeight;
 
 logAllThings();
 console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
