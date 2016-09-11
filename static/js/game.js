@@ -31,6 +31,16 @@ if (portrait) {
   }
 
 function preload() {
+
+
+  var loadingBar = game.add.sprite(0, game.world.height - 100, 'preloader');
+  var loadingBarResizeX = game.world.width/387;
+  loadingBar.scale.setTo(loadingBarResizeX,1);  
+  var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
+  statusText.anchor.setTo(0.5);
+  game.load.setPreloadSprite(loadingBar);
+
+
   game.load.text('leveldata', 'static/js/levels.json');
 
   game.load.image('heart', 'static/assets/images/Heart.png');
@@ -112,11 +122,29 @@ background.tileScale.y = resizeY;
   wordPool.setAll('outOfBoundsKill', true);
   wordPool.setAll('checkWorldbounds', true);
 
+  function createRandom() {
+    return game.rnd.integerInRange(0, length - 1);
+  }
+
+  var wordsArray = [];
+
   var words = Object.keys(verbs);
   var length = words.length;
   function createWord() {
-	var randomNumber = game.rnd.integerInRange(0,length-1);
+	var randomNumber = function() {
+            var number = createRandom();
+            while (wordsArray.indexOf(number) > -1) {
+              number = createRandom();
+            } return number;
+        }
+        
 	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
+
+	wordsArray.push(randomNumber);
+        if (wordsArray.length > 10) {
+          wordsArray.pop();
+        }
+
 	word.stroke = "d377ae";
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
@@ -235,6 +263,26 @@ background.tileScale.y = resizeY;
       var heart = heartPool.getFirstAlive();
       heart.kill();
      
+    emitter.y = sprite.y;
+
+   
+
+    emitter.start(true, 1000, null, 5);
+
+    //game.time.events.add(2000, destroyEmitter, this);
+  }
+
+
+//this function breaks everything, so not calling it
+//  function destroyEmitter() {
+//    emitter.destroy();
+//  }
+
+  function loseLife() {
+      heartCount--;
+      var heart = heartPool.getFirstAlive();
+      heart.kill();
+     
       if (!heartCount) {
         startLoseFade();
       }
@@ -268,6 +316,7 @@ var bootState = {
   
   preload: function() {
     game.load.image('logo','static/assets/images/logo.png');
+    game.load.image('preloader', 'static/assets/images/loading.png');
 
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
@@ -319,56 +368,52 @@ var loadState = {
   create: function() {
     console.log('Loadstate');
 
-  game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
   
-  game.scale.pageAlignHorizontally = true;
-  game.scale.pageAlignVertically = true;
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
   
-  game.scale.refresh();
+    game.scale.refresh();
 
-var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
+    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
-  if (portrait){
-    var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-    continueText.anchor.set(0.5);
-    game.input.onTap.addOnce(this.start, this);  
-  } else { 
-    var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-    continueText.anchor.set(0.5);
-    game.input.onTap.addOnce(this.start, this);  
-  }
-},
+    if (portrait){
+      var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+      continueText.anchor.set(0.5);
+      game.input.onTap.addOnce(this.start, this);  
+    } else { 
+      var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
+      continueText.anchor.set(0.5);
+      game.input.onTap.addOnce(this.start, this);  
+    }
+  },
+  
   start: function() {
     game.state.start('play');
-  },
+  }
 
   //render: function() {
   //  game.debug.cameraInfo(game.camera, 32, 32);
   //}
 };
 
-
 var playState = {
   create: function() {
     console.log('Playstate');
     score = 0;
-    lives = 3;
     create();
   },
   update: function() {
     update();
-  },
-
-  //render: function() {
-  //  render();
-  //}
+  }
 };
 
 var progressState = {
   create: function() {
     level++;
-    console.log('Level Up!!'); game.stage.backgroundColor = 0x000000;
+    console.log('LevelUp!!');
+    game.stage.backgroundColor = 0x000000;
     var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
