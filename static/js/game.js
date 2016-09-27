@@ -123,28 +123,35 @@ background.tileScale.y = resizeY;
   wordPool.setAll('outOfBoundsKill', true);
   wordPool.setAll('checkWorldbounds', true);
 
-  function createRandom() {
-    return game.rnd.integerInRange(0, length - 1);
-  }
 
   var wordsArray = [];
 
   var words = Object.keys(verbs);
   var length = words.length;
+
+  function createRandom() {
+    return game.rnd.integerInRange(0, length - 1);
+  }
+
   function createWord() {
-//	var randomNumber = function() {
-//            var number = createRandom();
-//            while (wordsArray.indexOf(number) > -1) {
-//              number = createRandom();
-//            } return number;
-//        }
-	var randomNumber = game.rnd.integerInRange(0,length-1);        
+	var randomNumber = (function() {
+            var number = createRandom();
+            while (wordsArray.indexOf(number) > -1) {
+              number = createRandom();
+            } 
+	return number;
+        })();
+
 	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
 
-//	wordsArray.push(randomNumber);
-//        if (wordsArray.length > 10) {
-//          wordsArray.pop();
-//        }
+	console.log('random number is ' + randomNumber);
+	console.log('word = ' + words[randomNumber]);
+	console.log('wordsArray is ' + wordsArray);
+
+	wordsArray.push(randomNumber);
+        if (wordsArray.length > 10) {
+          wordsArray.shift();
+        }
 
 	word.stroke = "d377ae";
 	word.strokeThickness = 3;
@@ -259,25 +266,6 @@ background.tileScale.y = resizeY;
 //    emitter.destroy();
 //  }
 
-  function loseLife() {
-      heartCount--;
-      var heart = heartPool.getFirstAlive();
-      heart.kill();
-     
-    emitter.y = sprite.y;
-
-   
-
-    emitter.start(true, 1000, null, 5);
-
-    //game.time.events.add(2000, destroyEmitter, this);
-  }
-
-
-//this function breaks everything, so not calling it
-//  function destroyEmitter() {
-//    emitter.destroy();
-//  }
 
   function loseLife() {
       heartCount--;
@@ -308,10 +296,6 @@ function update() {
   
 }
 
-//function render() {
-//  game.debug.inputInfo(32,32);
-//  game.debug.pointer(game.input.activePointer);
-//}
 
 var bootState = {
   
@@ -353,9 +337,6 @@ var bootState = {
     
   },
 
-  //render: function() {
-  //  game.debug.pointer(game.input.activePointer);
-  //},
 
   start: function() {
     game.state.start('load');
@@ -394,9 +375,6 @@ var loadState = {
     game.state.start('play');
   }
 
-  //render: function() {
-  //  game.debug.cameraInfo(game.camera, 32, 32);
-  //}
 };
 
 var playState = {
