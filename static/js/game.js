@@ -33,21 +33,21 @@ if (portrait) {
 function preload() {
 
 
-  var loadingBar = game.add.sprite(0, game.world.height - 100, 'preloader');
-  var loadingBarResizeX = game.world.width/387;
-  loadingBar.scale.setTo(loadingBarResizeX,1);  
-  var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
-  statusText.anchor.setTo(0.5);
-  game.load.setPreloadSprite(loadingBar);
+//  var loadingBar = game.add.sprite(0, game.world.height - 100, 'preloader');
+//  var loadingBarResizeX = game.world.width/387;
+//  loadingBar.scale.setTo(loadingBarResizeX,1);  
+//  var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
+//  statusText.anchor.setTo(0.5);
+//  game.load.setPreloadSprite(loadingBar);
 
 
   game.load.text('leveldata', 'static/js/levels.json');
 
   game.load.image('heart', 'static/assets/images/Heart.png');
 
-  game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island.png');
-  game.load.image('level2Background', 'static/assets/images/fishbgexp.jpg');
-  game.load.image('level3Background', 'static/assets/images/cloudsinthedesert.png');
+  game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island_scaled.png');
+  game.load.image('level2Background', 'static/assets/images/fishbgexp_scaled.jpg');
+  game.load.image('level3Background', 'static/assets/images/cloudsinthedesert_scaled.png');
   game.load.image('diamond', 'static/assets/images/diamond.png');
 }
 
@@ -77,7 +77,8 @@ logAllThings();
 console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
 console.log('the backgroundHeight = ' + levelVars.backgroundHeight);
 
-
+console.log('resizeX is ' + resizeX);
+console.log('resizeY is ' + resizeY);
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
@@ -131,19 +132,19 @@ background.tileScale.y = resizeY;
   var words = Object.keys(verbs);
   var length = words.length;
   function createWord() {
-	var randomNumber = function() {
-            var number = createRandom();
-            while (wordsArray.indexOf(number) > -1) {
-              number = createRandom();
-            } return number;
-        }
-        
+//	var randomNumber = function() {
+//            var number = createRandom();
+//            while (wordsArray.indexOf(number) > -1) {
+//              number = createRandom();
+//            } return number;
+//        }
+	var randomNumber = game.rnd.integerInRange(0,length-1);        
 	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
 
-	wordsArray.push(randomNumber);
-        if (wordsArray.length > 10) {
-          wordsArray.pop();
-        }
+//	wordsArray.push(randomNumber);
+//        if (wordsArray.length > 10) {
+//          wordsArray.pop();
+//        }
 
 	word.stroke = "d377ae";
 	word.strokeThickness = 3;
@@ -345,8 +346,8 @@ var bootState = {
     touchToStart.anchor.set(0.5);
     
     touchToStart.alpha = 1;
-    var textTween = game.add.tween(touchToStart).to( { alpha: 0 }, 500, "Linear", true, 1, -1);
-    textTween.yoyo(true, 500);
+    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
+    textTween.yoyo(true, 300);
     
     game.input.onTap.addOnce(this.start, this);
     
