@@ -53,7 +53,7 @@ var verbs = {
 	'danced':{regular:true},
 	'dealed':{regular:true},
 	'decided':{regular:true},
-	'decreases':{regular:true},
+	'decreased':{regular:true},
 	'deleted':{regular:true},
 	'developed':{regular:true},
 	'discovered':{regular:true},
