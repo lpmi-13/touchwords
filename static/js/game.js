@@ -1,5 +1,3 @@
-//var w = window.innerWidth * window.devicePixelRatio;
-//var h = window.innerWidth * window.devicePixelRatio;
 
 var width = screen.width;
 var height = screen.height;
@@ -16,11 +14,7 @@ function logAllThings() {
 
 
 function checkOrientation(width, height) {
-  if (height > width) {
-    return true;
-  } else {
-    return false;
-  }
+  return height > width;
 }
 
 if (portrait) {
@@ -59,6 +53,10 @@ var livesPool;
 var wordPool;
 var scorePool;
 var heartPool;
+var letterPool;
+var clickedArray = [];
+var vowelArray = ['a','e','i','o','u','y'];
+var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -116,6 +114,8 @@ background.tileScale.y = resizeY;
   wordPool = game.add.group();
   wordPool.enableBody = true;
   wordPool.physicsBodytype = Phaser.Physics.ARCADE;
+  wordPool.enableBody = true;
+  wordPool.physicsBodytype = Phaser.Physics.ARCADE;
 
   wordPool.setAll('anchor.x', 0.5);
   wordPool.setAll('anchor.y', 0.5);
@@ -157,10 +157,13 @@ background.tileScale.y = resizeY;
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
 	word.data = {
-		regular : verbs[words[randomNumber]].regular
+		regular : verbs[words[randomNumber]].regular,
+		answer : verbs[words[randomNumber]].correction
 	}
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
+
+	console.log(word.data.answer);
 
 	word.body.velocity.setTo(game.rnd.integerInRange(levelVars.velocityXlower,levelVars.velocityXhigher),game.rnd.integerInRange(levelVars.velocityYlower,levelVars.velocityYhigher));
 	word.body.collideWorldBounds = true;
@@ -179,6 +182,7 @@ background.tileScale.y = resizeY;
 
   function test(sprite, pointer) {
       if (!sprite.data.regular) {
+	  clickedArray.push({text:sprite.text,answer:sprite.data.answer});
 	  diamondBurst(sprite);
           addScore(sprite);
   	  score += 10;
@@ -198,7 +202,7 @@ background.tileScale.y = resizeY;
   function winTransition() {
     wordPool.callAll('kill');
     if (portrait) {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.3em Georgia',fill:'#0095DD'});
     } else {
       levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
     }
@@ -241,7 +245,8 @@ background.tileScale.y = resizeY;
 
   function progressFadeComplete() {
     game.time.events.resume();
-    game.state.start('levelUp');
+//    game.state.start('levelUp');
+    game.state.start('bonus');
   }
 
   function flash() {
@@ -252,8 +257,6 @@ background.tileScale.y = resizeY;
   function diamondBurst(sprite) {
     emitter.x = sprite.x;
     emitter.y = sprite.y;
-
-   
 
     emitter.start(true, 1000, null, 5);
 
@@ -388,12 +391,53 @@ var playState = {
   }
 };
 
+var bonusState = {
+  create: function() {
+    console.log('bonus round!');
+    console.log(clickedArray);
+    game.stage.backgroundColor = '#0000A0';
+//    var bonusText = game.add.text(game.world.centerX, game.world.centerY, "This is bonus text", {font: '2em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth: width*.65});
+//    bonusText.anchor.set(0.5);
+
+    var graphics = game.add.graphics(100,100);
+    graphics.lineStyle(2, 0x0000FF, 1);
+
+    var text;
+    var square;
+    var style = {font: '1em Arial', fill: '#ff0044', align: 'center'};
+    var letterPool = game.add.group();    
+
+    var letterSprite;
+
+    for (var i = 0; i < clickedArray.length; i++) {
+      var displayItem = clickedArray[i].text;
+      var wordItem = clickedArray[i].answer.split('');
+      console.log(wordItem);
+
+      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ' + displayItem, {font: '3em Georgia', fill: '#00FF00'});
+      promptText.anchor.set(0.5);
+
+      for (var j = 1; j < wordItem.length+1; j++) {
+        square = graphics.drawRect(50*j, game.world.height - 300, 40, 40);
+        letterSprite = game.add.text((50*j)+120, game.world.height-180, wordItem[j-1], style, letterPool);
+        letterSprite.anchor.set(0.5);
+      }
+    }
+
+    game.input.onTap.addOnce(this.start, this);
+  },
+  start: function() {
+    game.state.start('levelUp');
+  }
+};
+
 var progressState = {
   create: function() {
     level++;
     console.log('LevelUp!!');
     game.stage.backgroundColor = 0x000000;
     var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
+
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
   },
@@ -439,7 +483,6 @@ game.state.add('boot', bootState);
 game.state.add('load', loadState);
 game.state.add('play', playState);
 game.state.add('levelUp', progressState);
+game.state.add('bonus', bonusState);
 game.state.add('win', winState);
 game.state.add('lose', loseState);
-
-game.state.start('boot');
