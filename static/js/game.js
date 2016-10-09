@@ -39,6 +39,8 @@ function preload() {
 
   game.load.image('heart', 'static/assets/images/Heart.png');
 
+  game.load.image('button', 'static/assets/images/button.png');
+
   game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island_scaled.png');
   game.load.image('level2Background', 'static/assets/images/fishbgexp_scaled.jpg');
   game.load.image('level3Background', 'static/assets/images/cloudsinthedesert_scaled.png');
@@ -53,7 +55,6 @@ var livesPool;
 var wordPool;
 var scorePool;
 var heartPool;
-var letterPool;
 var clickedArray = [];
 var vowelArray = ['a','e','i','o','u','y'];
 var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
@@ -112,8 +113,6 @@ background.tileScale.y = resizeY;
   }
 
   wordPool = game.add.group();
-  wordPool.enableBody = true;
-  wordPool.physicsBodytype = Phaser.Physics.ARCADE;
   wordPool.enableBody = true;
   wordPool.physicsBodytype = Phaser.Physics.ARCADE;
 
@@ -399,32 +398,51 @@ var bonusState = {
 //    var bonusText = game.add.text(game.world.centerX, game.world.centerY, "This is bonus text", {font: '2em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth: width*.65});
 //    bonusText.anchor.set(0.5);
 
-    var graphics = game.add.graphics(100,100);
-    graphics.lineStyle(2, 0x0000FF, 1);
-
     var text;
     var square;
-    var style = {font: '1em Arial', fill: '#ff0044', align: 'center'};
-    var letterPool = game.add.group();    
+    var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
 
-    var letterSprite;
+    var buttonPool = game.add.group();
+    buttonPool.enableBody = true;
+    var letterPool = game.add.group();    
+//    letterPool.enableBody = true;
 
     for (var i = 0; i < clickedArray.length; i++) {
       var displayItem = clickedArray[i].text;
+      var displayArray = displayItem.split('');
       var wordItem = clickedArray[i].answer.split('');
       console.log(wordItem);
+
+      var uniqueArray = displayArray.filter(function(obj) {
+        return wordItem.indexOf(obj) == -1
+      });
+
+      var mixedArray = unique(wordItem.concat(uniqueArray));
+
+      var shuffledWord = shuffle(mixedArray);
 
       var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ' + displayItem, {font: '3em Georgia', fill: '#00FF00'});
       promptText.anchor.set(0.5);
 
-      for (var j = 1; j < wordItem.length+1; j++) {
-        square = graphics.drawRect(50*j, game.world.height - 300, 40, 40);
-        letterSprite = game.add.text((50*j)+120, game.world.height-180, wordItem[j-1], style, letterPool);
+      for (var j = 1; j < shuffledWord.length+1; j++) {
+        var button = game.add.sprite(80*j, game.world.height - 300, 'button');
+        button.anchor.set(0.5);
+        button.inputEnabled = true;
+	button.data.letter = shuffledWord[j-1];
+        button.events.onInputDown.add(spellCheck, this);
+	buttonPool.add(button);
+
+        var letterSprite = game.add.text(80*j, game.world.height- 300, shuffledWord[j-1], style);
         letterSprite.anchor.set(0.5);
+	letterPool.add(letterSprite);
       }
     }
 
-    game.input.onTap.addOnce(this.start, this);
+  function spellCheck(sprite,pointer) {
+    console.log(sprite.data.letter);
+  }
+
+//    game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
     game.state.start('levelUp');
