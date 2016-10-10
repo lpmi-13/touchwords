@@ -41,6 +41,8 @@ function preload() {
 
   game.load.image('button', 'static/assets/images/button.png');
 
+  game.load.image('deleteButton', 'static/assets/images/deleteButton.png');
+
   game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island_scaled.png');
   game.load.image('level2Background', 'static/assets/images/fishbgexp_scaled.jpg');
   game.load.image('level3Background', 'static/assets/images/cloudsinthedesert_scaled.png');
@@ -410,6 +412,7 @@ var bonusState = {
     for (var i = 0; i < clickedArray.length; i++) {
       var displayItem = clickedArray[i].text;
       var displayArray = displayItem.split('');
+      var answer = clickedArray[i].answer;
       var wordItem = clickedArray[i].answer.split('');
       console.log(wordItem);
 
@@ -425,22 +428,42 @@ var bonusState = {
       promptText.anchor.set(0.5);
 
       for (var j = 1; j < shuffledWord.length+1; j++) {
-        var button = game.add.sprite(80*j, game.world.height - 300, 'button');
+        var button = game.add.sprite(80*j, game.world.height - 100, 'button');
         button.anchor.set(0.5);
         button.inputEnabled = true;
 	button.data.letter = shuffledWord[j-1];
         button.events.onInputDown.add(spellCheck, this);
 	buttonPool.add(button);
 
-        var letterSprite = game.add.text(80*j, game.world.height- 300, shuffledWord[j-1], style);
+        var letterSprite = game.add.text(80*j, game.world.height- 100, shuffledWord[j-1], style);
         letterSprite.anchor.set(0.5);
 	letterPool.add(letterSprite);
       }
     }
 
+    var deleteButton = game.add.sprite(game.world.width - 100, game.world.height - 100, 'deleteButton');
+    deleteButton.inputEnabled = true;
+    deleteButton.events.onInputDown.add(deleteLetter,this);
+
+  var spellText = "";
+
+  var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#00FF00', align: 'center'});
+
+  displaySpelling.anchor.set(0.5);
+
   function spellCheck(sprite,pointer) {
-    console.log(sprite.data.letter);
+    spellText += sprite.data.letter;
+    displaySpelling.setText(spellText);
+    if (spellText == answer) {
+      console.log('you got it!');
+    }
   }
+
+  function deleteLetter(sprite,pointer){
+    spellText = spellText.substring(0, spellText.length - 1);
+    displaySpelling.setText(spellText);
+  }
+
 
 //    game.input.onTap.addOnce(this.start, this);
   },
