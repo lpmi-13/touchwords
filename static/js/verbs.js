@@ -51,7 +51,6 @@ var verbs = {
 	'cutted':{regular:false,correction:'cut'},
 	'changed':{regular:true},
 	'danced':{regular:true},
-	'dealed':{regular:true},
 	'decided':{regular:true},
 	'decreased':{regular:true},
 	'deleted':{regular:true},

@@ -58,8 +58,8 @@ var wordPool;
 var scorePool;
 var heartPool;
 var clickedArray = [];
-var vowelArray = ['a','e','i','o','u','y'];
-var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
+//var vowelArray = ['a','e','i','o','u','y'];
+//var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -188,9 +188,8 @@ background.tileScale.y = resizeY;
           addScore(sprite);
   	  score += 10;
 	  scoreText.setText('Points: ' + score + '/' + levelVars.mustScore);	  
-	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
-              winTransition();
-          } else if (score == levelVars.mustScore) {
+              
+          if (score == levelVars.mustScore) {
 	      levelUpTransition();
 	  }
 	  sprite.kill();
@@ -200,19 +199,19 @@ background.tileScale.y = resizeY;
       }
   }
 
-  function winTransition() {
-    wordPool.callAll('kill');
-    if (portrait) {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.3em Georgia',fill:'#0095DD'});
-    } else {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
-    }
+//  function winTransition() {
+//    wordPool.callAll('kill');
+//    if (portrait) {
+//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.3em Georgia',fill:'#0095DD'});
+//    } else {
+//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
+//    }
     
-    levelUpText.anchor.set(0.5);
-    var tweenTransition = game.add.tween(levelUpText).to( {y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
-    game.time.events.pause();
-    tweenTransition.onComplete.add(startWinFade, this);
-  }
+//    levelUpText.anchor.set(0.5);
+//    var tweenTransition = game.add.tween(levelUpText).to( {y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
+//    game.time.events.pause();
+//    tweenTransition.onComplete.add(startWinFade, this);
+//  }
 
   function startWinFade() { 
     game.camera.fade(0x000000, 1500, true);
@@ -224,7 +223,7 @@ background.tileScale.y = resizeY;
     game.state.start('win');
   }
 
-  function levelUpTransition() {
+  function levelUpTransition(level) {
     wordPool.callAll('kill');
 
     if (portrait) {
@@ -246,7 +245,6 @@ background.tileScale.y = resizeY;
 
   function progressFadeComplete() {
     game.time.events.resume();
-//    game.state.start('levelUp');
     game.state.start('bonus');
   }
 
@@ -362,8 +360,6 @@ var loadState = {
   
     game.scale.refresh();
 
-    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
-
     if (portrait){
       var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
       continueText.anchor.set(0.5);
@@ -397,9 +393,7 @@ var bonusState = {
     console.log('bonus round!');
     console.log(clickedArray);
     game.stage.backgroundColor = '#0000A0';
-//    var bonusText = game.add.text(game.world.centerX, game.world.centerY, "This is bonus text", {font: '2em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth: width*.65});
-//    bonusText.anchor.set(0.5);
-
+    var bonusCount = 0;
     var text;
     var square;
     var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
@@ -409,11 +403,13 @@ var bonusState = {
     var letterPool = game.add.group();    
 //    letterPool.enableBody = true;
 
-    for (var i = 0; i < clickedArray.length; i++) {
-      var displayItem = clickedArray[i].text;
+    function renderBonusItem() {
+      console.log('the current count is: ' + bonusCount);
+      console.log(clickedArray.length);
+      var displayItem = clickedArray[bonusCount].text;
       var displayArray = displayItem.split('');
-      var answer = clickedArray[i].answer;
-      var wordItem = clickedArray[i].answer.split('');
+      var answer = clickedArray[bonusCount].answer;
+      var wordItem = clickedArray[bonusCount].answer.split('');
       console.log(wordItem);
 
       var uniqueArray = displayArray.filter(function(obj) {
@@ -428,43 +424,70 @@ var bonusState = {
       promptText.anchor.set(0.5);
 
       for (var j = 1; j < shuffledWord.length+1; j++) {
-        var button = game.add.sprite(80*j, game.world.height - 100, 'button');
-        button.anchor.set(0.5);
-        button.inputEnabled = true;
-	button.data.letter = shuffledWord[j-1];
-        button.events.onInputDown.add(spellCheck, this);
-	buttonPool.add(button);
+//	var oldButton = buttonPool.getFirstExists();
+//	if(oldButton) {
+//	  var button = oldButton.reset(80*j, game.world.height - 100);
+//	} else {
+          var button = game.add.sprite(80*j, game.world.height - 100, 'button');
+          button.anchor.set(0.5);
+          button.inputEnabled = true;
+	  button.data.letter = shuffledWord[j-1];
+          button.events.onInputDown.add(spellCheck, this);
+	  buttonPool.add(button);
+//	}
 
         var letterSprite = game.add.text(80*j, game.world.height- 100, shuffledWord[j-1], style);
         letterSprite.anchor.set(0.5);
 	letterPool.add(letterSprite);
       }
-    }
+    
 
     var deleteButton = game.add.sprite(game.world.width - 100, game.world.height - 100, 'deleteButton');
     deleteButton.inputEnabled = true;
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
-  var spellText = "";
+    var spellText = "";
 
-  var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#00FF00', align: 'center'});
+    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#00FF00', align: 'center'});
 
-  displaySpelling.anchor.set(0.5);
+    displaySpelling.anchor.set(0.5);
 
-  function spellCheck(sprite,pointer) {
-    spellText += sprite.data.letter;
-    displaySpelling.setText(spellText);
-    if (spellText == answer) {
-      console.log('you got it!');
+    console.log('the level is: ' + level);
+
+    function spellCheck(sprite,pointer) {
+      spellText += sprite.data.letter;
+      displaySpelling.setText(spellText);
+      if (spellText == answer) {
+        console.log('you got it!');
+        clearScreen();
+	bonusCount++;
+	if (level === 2 && bonusCount == clickedArray.length) {
+	  game.state.start('win');
+        } else if (bonusCount == clickedArray.length) {
+	  clickedArray = [];
+	  game.state.start('levelUp');
+	}  else {
+	  renderBonusItem();
+        }
+      }
+    }
+
+    function deleteLetter(sprite,pointer){
+      spellText = spellText.substring(0, spellText.length - 1);
+      displaySpelling.setText(spellText);
+    } 
+
+    function clearScreen() {
+      console.log('killing all buttons');
+      buttonPool.callAll('kill');
+      console.log('killing all letters');
+      letterPool.callAll('kill');
+      displaySpelling.setText('');
+      promptText.setText('');
     }
   }
 
-  function deleteLetter(sprite,pointer){
-    spellText = spellText.substring(0, spellText.length - 1);
-    displaySpelling.setText(spellText);
-  }
-
-
+  renderBonusItem();
 //    game.input.onTap.addOnce(this.start, this);
   },
   start: function() {
