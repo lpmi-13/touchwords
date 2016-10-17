@@ -39,7 +39,7 @@ function preload() {
 
   game.load.image('heart', 'static/assets/images/Heart.png');
 
-  game.load.image('button', 'static/assets/images/button.png');
+  game.load.image('button', 'static/assets/images/coloredButton.png');
 
   game.load.image('deleteButton', 'static/assets/images/deleteButton.png');
 
@@ -392,10 +392,44 @@ var bonusState = {
   create: function() {
     console.log('bonus round!');
     console.log(clickedArray);
-    game.stage.backgroundColor = '#0000A0';
+    game.stage.backgroundColor = '#2B4970';
     var bonusCount = 0;
     var text;
     var square;
+
+    this.startTime = new Date();
+    this.totalTime = 120;
+    this.timeElapsed = 0;
+
+    this.createTimer();
+
+    function updateTimer() {
+
+      var currentTime = new Date();
+      var timeDifference = this.startTime.getTime() - currentTime.getTime();
+
+      this.timeElapsed = Math.abs(timeDifference / 1000);
+
+      var timeRemaining = this.totalTime - this.timeElapsed;
+      var minutes = Math.floor(timeRemaining / 60);
+      var seconds = Math.floor(timeRemaining) - (60 * minutes);
+
+      var result = (minutes < 10) ? '0' + minutes : minutes;
+
+      result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
+
+      this.timeLabel.text = result;
+    }
+
+    var gameTimer = game.time.events.loop(100, updateTimer, this);
+//    var timer = game.time.create();
+//    var timerEvent = timer.add(Phaser.Timer.MINUTE * 1 + Phaser.Timer.SECOND * 30, this.endTimer, this);
+//    timer.start();
+//    var seconds = 0;
+//    var minutes = 0;
+
+//    timerText = game.add.text(game.world.centerX, 50, '00:00', {font: '4em Arial', align: 'center'}); 
+
     var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
 
     var buttonPool = game.add.group();
@@ -420,8 +454,12 @@ var bonusState = {
 
       var shuffledWord = shuffle(mixedArray);
 
-      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ' + displayItem, {font: '3em Georgia', fill: '#00FF00'});
+      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
       promptText.anchor.set(0.5);
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'}); 
+      wordToCorrect.anchor.set(0.5);
+      wordToCorrect.stroke = 'AA9239';
+      wordToCorrect.strokeThickness = 3;
 
       for (var j = 1; j < shuffledWord.length+1; j++) {
 //	var oldButton = buttonPool.getFirstExists();
@@ -448,7 +486,7 @@ var bonusState = {
 
     var spellText = "";
 
-    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#00FF00', align: 'center'});
+    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#AA6339', align: 'center'});
 
     displaySpelling.anchor.set(0.5);
 
@@ -459,14 +497,14 @@ var bonusState = {
       displaySpelling.setText(spellText);
       if (spellText == answer) {
         console.log('you got it!');
-        clearScreen();
 	bonusCount++;
 	if (level === 2 && bonusCount == clickedArray.length) {
-	  game.state.start('win');
+	  startFinalWinFade();
         } else if (bonusCount == clickedArray.length) {
 	  clickedArray = [];
-	  game.state.start('levelUp');
+	  startBonusWinFade();
 	}  else {
+          clearScreen();
 	  renderBonusItem();
         }
       }
@@ -483,13 +521,40 @@ var bonusState = {
       console.log('killing all letters');
       letterPool.callAll('kill');
       displaySpelling.setText('');
+      wordToCorrect.setText('');
       promptText.setText('');
+    }
+
+    function startBonusWinFade() { 
+      game.camera.fade(0x000000, 1500, true);
+      game.camera.onFadeComplete.add(bonusWinFadeComplete,this);
+    }
+
+    function bonusWinFadeComplete() {
+      game.time.events.resume();
+      game.state.start('levelUp');
+    }
+
+    function startFinalWinFade() { 
+      game.camera.fade(0x000000, 1500, true);
+      game.camera.onFadeComplete.add(finalWinFadeComplete,this);
+    }
+
+    function finalWinFadeComplete() {
+      game.time.events.resume();
+      game.state.start('win');
     }
   }
 
   renderBonusItem();
 //    game.input.onTap.addOnce(this.start, this);
   },
+  createTimer: function() {
+    this.timeLabel = this.game.add.text(this.game.world.centerX, 40, '00:00', {font: '4em Arial', fill: '#fff'});
+    this.timeLabel.anchor.setTo(0.5,0);
+    this.timeLabel.align = 'center';
+  },
+
   start: function() {
     game.state.start('levelUp');
   }
