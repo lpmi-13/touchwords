@@ -2,6 +2,7 @@
 var width = screen.width;
 var height = screen.height;
 
+
 var portrait = checkOrientation(width, height)
 
 function logAllThings() {
@@ -397,6 +398,10 @@ var bonusState = {
     var text;
     var square;
 
+    var gameWidth = game.world.width;
+    var gameHeight = game.world.height;
+
+
     this.startTime = new Date();
     this.totalTime = 120;
     this.timeElapsed = 0;
@@ -422,20 +427,34 @@ var bonusState = {
     }
 
     var gameTimer = game.time.events.loop(100, updateTimer, this);
-//    var timer = game.time.create();
-//    var timerEvent = timer.add(Phaser.Timer.MINUTE * 1 + Phaser.Timer.SECOND * 30, this.endTimer, this);
-//    timer.start();
-//    var seconds = 0;
-//    var minutes = 0;
 
-//    timerText = game.add.text(game.world.centerX, 50, '00:00', {font: '4em Arial', align: 'center'}); 
 
-    var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
 
     var buttonPool = game.add.group();
     buttonPool.enableBody = true;
     var letterPool = game.add.group();    
-//    letterPool.enableBody = true;
+    var numberOfElements = 6;
+
+    if (portrait) {
+      var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
+      var screenGutterWidth = gameWidth * .1;
+      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
+    } else {
+      var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
+      var screenGutterWidth = gameWidth * .2;
+      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
+    }
+
+      var elementHeight = (game.world.height/6);
+
+      var buttonScaleX = (elementWidth * .85)/53;
+      var buttonScaleY = (elementHeight * .85)/40;
+	console.log('game.world.width = ' + game.world.width);
+	console.log('game width: ' + gameWidth);
+	console.log('number of elements: ' + numberOfElements);
+	console.log('element width: ' + elementWidth);
+	console.log('buttonScaleX: ' + buttonScaleX);
+	console.log('buttonScaleY: ' + buttonScaleY);
 
     function renderBonusItem() {
       console.log('the current count is: ' + bonusCount);
@@ -461,27 +480,39 @@ var bonusState = {
       wordToCorrect.stroke = 'AA9239';
       wordToCorrect.strokeThickness = 3;
 
-      for (var j = 1; j < shuffledWord.length+1; j++) {
-//	var oldButton = buttonPool.getFirstExists();
-//	if(oldButton) {
-//	  var button = oldButton.reset(80*j, game.world.height - 100);
-//	} else {
-          var button = game.add.sprite(80*j, game.world.height - 100, 'button');
-          button.anchor.set(0.5);
-          button.inputEnabled = true;
-	  button.data.letter = shuffledWord[j-1];
-          button.events.onInputDown.add(spellCheck, this);
-	  buttonPool.add(button);
-//	}
 
-        var letterSprite = game.add.text(80*j, game.world.height- 100, shuffledWord[j-1], style);
+      for (var j = 0; j < shuffledWord.length; j++) {
+	var row = Math.floor(j / numberOfElements);
+	var column = Math.floor(j % numberOfElements);
+
+//        console.log('row is ' + row);
+//	console.log('column is ' + column);
+
+	var xPos = (column * elementWidth) + screenGutterWidth;
+	var yPos = (game.world.height - 100) - (row * elementHeight);
+
+//	console.log('xPos is ' + xPos);
+	console.log('yPos is ' + yPos);
+	console.log('game.world.height - 100 = ' + (game.world.height - 100));
+
+        var button = game.add.sprite(xPos, yPos, 'button');
+        button.anchor.set(0.5);
+        button.inputEnabled = true;
+	button.data.letter = shuffledWord[j];
+        button.events.onInputDown.add(spellCheck, this);
+	button.scale.set(buttonScaleX,buttonScaleY);
+	buttonPool.add(button);
+
+        var letterSprite = game.add.text(xPos, yPos, shuffledWord[j], style);
         letterSprite.anchor.set(0.5);
 	letterPool.add(letterSprite);
       }
     
 
-    var deleteButton = game.add.sprite(game.world.width - 100, game.world.height - 100, 'deleteButton');
+    var deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height - 100, 'deleteButton');
     deleteButton.inputEnabled = true;
+    deleteButton.anchor.set(0.5);
+    deleteButton.scale.set(buttonScaleX,buttonScaleY);
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
     var spellText = "";
