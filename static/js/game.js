@@ -1,7 +1,8 @@
+//var w = window.innerWidth * window.devicePixelRatio;
+//var h = window.innerWidth * window.devicePixelRatio;
 
 var width = screen.width;
 var height = screen.height;
-
 
 var portrait = checkOrientation(width, height)
 
@@ -15,7 +16,11 @@ function logAllThings() {
 
 
 function checkOrientation(width, height) {
-  return height > width;
+  if (height > width) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 if (portrait) {
@@ -40,14 +45,10 @@ function preload() {
 
   game.load.image('heart', 'static/touchwords/assets/images/Heart.png');
 
-  game.load.image('button', 'static/touchwords/assets/images/coloredButton.png');
-
-  game.load.image('deleteButton', 'static/touchwords/assets/images/deleteButton.png');
-
   game.load.image('level1Background', 'static/touchwords/assets/images/voodoo_cactus_island_scaled.png');
   game.load.image('level2Background', 'static/touchwords/assets/images/fishbgexp_scaled.jpg');
   game.load.image('level3Background', 'static/touchwords/assets/images/cloudsinthedesert_scaled.png');
-  game.load.image('diamond', 'static/toucwords/assets/images/diamond.png');
+  game.load.image('diamond', 'static/touchwords/assets/images/diamond.png');
 }
 
 var emitter;
@@ -58,9 +59,6 @@ var livesPool;
 var wordPool;
 var scorePool;
 var heartPool;
-var clickedArray = [];
-//var vowelArray = ['a','e','i','o','u','y'];
-//var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -159,13 +157,10 @@ background.tileScale.y = resizeY;
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
 	word.data = {
-		regular : verbs[words[randomNumber]].regular,
-		answer : verbs[words[randomNumber]].correction
+		regular : verbs[words[randomNumber]].regular
 	}
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
-
-	console.log(word.data.answer);
 
 	word.body.velocity.setTo(game.rnd.integerInRange(levelVars.velocityXlower,levelVars.velocityXhigher),game.rnd.integerInRange(levelVars.velocityYlower,levelVars.velocityYhigher));
 	word.body.collideWorldBounds = true;
@@ -184,13 +179,13 @@ background.tileScale.y = resizeY;
 
   function test(sprite, pointer) {
       if (!sprite.data.regular) {
-	  clickedArray.push({text:sprite.text,answer:sprite.data.answer});
 	  diamondBurst(sprite);
           addScore(sprite);
   	  score += 10;
 	  scoreText.setText('Points: ' + score + '/' + levelVars.mustScore);	  
-              
-          if (score == levelVars.mustScore) {
+	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
+              winTransition();
+          } else if (score == levelVars.mustScore) {
 	      levelUpTransition();
 	  }
 	  sprite.kill();
@@ -200,19 +195,19 @@ background.tileScale.y = resizeY;
       }
   }
 
-//  function winTransition() {
-//    wordPool.callAll('kill');
-//    if (portrait) {
-//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.3em Georgia',fill:'#0095DD'});
-//    } else {
-//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
-//    }
+  function winTransition() {
+    wordPool.callAll('kill');
+    if (portrait) {
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
+    } else {
+      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
+    }
     
-//    levelUpText.anchor.set(0.5);
-//    var tweenTransition = game.add.tween(levelUpText).to( {y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
-//    game.time.events.pause();
-//    tweenTransition.onComplete.add(startWinFade, this);
-//  }
+    levelUpText.anchor.set(0.5);
+    var tweenTransition = game.add.tween(levelUpText).to( {y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
+    game.time.events.pause();
+    tweenTransition.onComplete.add(startWinFade, this);
+  }
 
   function startWinFade() { 
     game.camera.fade(0x000000, 1500, true);
@@ -224,7 +219,7 @@ background.tileScale.y = resizeY;
     game.state.start('win');
   }
 
-  function levelUpTransition(level) {
+  function levelUpTransition() {
     wordPool.callAll('kill');
 
     if (portrait) {
@@ -246,7 +241,7 @@ background.tileScale.y = resizeY;
 
   function progressFadeComplete() {
     game.time.events.resume();
-    game.state.start('bonus');
+    game.state.start('levelUp');
   }
 
   function flash() {
@@ -257,6 +252,8 @@ background.tileScale.y = resizeY;
   function diamondBurst(sprite) {
     emitter.x = sprite.x;
     emitter.y = sprite.y;
+
+   
 
     emitter.start(true, 1000, null, 5);
 
@@ -361,6 +358,8 @@ var loadState = {
   
     game.scale.refresh();
 
+    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
+
     if (portrait){
       var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
       continueText.anchor.set(0.5);
@@ -389,215 +388,12 @@ var playState = {
   }
 };
 
-var bonusState = {
-  create: function() {
-    console.log('bonus round!');
-    console.log(clickedArray);
-    game.stage.backgroundColor = '#2B4970';
-    var bonusCount = 0;
-    var text;
-    var square;
-
-    var gameWidth = game.world.width;
-    var gameHeight = game.world.height;
-
-
-    this.startTime = new Date();
-    this.totalTime = 120;
-    this.timeElapsed = 0;
-
-    this.createTimer();
-
-    function updateTimer() {
-
-      var currentTime = new Date();
-      var timeDifference = this.startTime.getTime() - currentTime.getTime();
-
-      this.timeElapsed = Math.abs(timeDifference / 1000);
-
-      var timeRemaining = this.totalTime - this.timeElapsed;
-      var minutes = Math.floor(timeRemaining / 60);
-      var seconds = Math.floor(timeRemaining) - (60 * minutes);
-
-      var result = (minutes < 10) ? '0' + minutes : minutes;
-
-      result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
-
-      this.timeLabel.text = result;
-    }
-
-    var gameTimer = game.time.events.loop(100, updateTimer, this);
-
-
-
-    var buttonPool = game.add.group();
-    buttonPool.enableBody = true;
-    var letterPool = game.add.group();    
-    var numberOfElements = 6;
-
-    if (portrait) {
-      var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .1;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
-    } else {
-      var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .2;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
-    }
-
-      var elementHeight = (game.world.height/6);
-
-      var buttonScaleX = (elementWidth * .85)/53;
-      var buttonScaleY = (elementHeight * .85)/40;
-	console.log('game.world.width = ' + game.world.width);
-	console.log('game width: ' + gameWidth);
-	console.log('number of elements: ' + numberOfElements);
-	console.log('element width: ' + elementWidth);
-	console.log('buttonScaleX: ' + buttonScaleX);
-	console.log('buttonScaleY: ' + buttonScaleY);
-
-    function renderBonusItem() {
-      console.log('the current count is: ' + bonusCount);
-      console.log(clickedArray.length);
-      var displayItem = clickedArray[bonusCount].text;
-      var displayArray = displayItem.split('');
-      var answer = clickedArray[bonusCount].answer;
-      var wordItem = clickedArray[bonusCount].answer.split('');
-      console.log(wordItem);
-
-      var uniqueArray = displayArray.filter(function(obj) {
-        return wordItem.indexOf(obj) == -1
-      });
-
-      var mixedArray = unique(wordItem.concat(uniqueArray));
-
-      var shuffledWord = shuffle(mixedArray);
-
-      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
-      promptText.anchor.set(0.5);
-      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'}); 
-      wordToCorrect.anchor.set(0.5);
-      wordToCorrect.stroke = 'AA9239';
-      wordToCorrect.strokeThickness = 3;
-
-
-      for (var j = 0; j < shuffledWord.length; j++) {
-	var row = Math.floor(j / numberOfElements);
-	var column = Math.floor(j % numberOfElements);
-
-//        console.log('row is ' + row);
-//	console.log('column is ' + column);
-
-	var xPos = (column * elementWidth) + screenGutterWidth;
-	var yPos = (game.world.height - 100) - (row * elementHeight);
-
-//	console.log('xPos is ' + xPos);
-	console.log('yPos is ' + yPos);
-	console.log('game.world.height - 100 = ' + (game.world.height - 100));
-
-        var button = game.add.sprite(xPos, yPos, 'button');
-        button.anchor.set(0.5);
-        button.inputEnabled = true;
-	button.data.letter = shuffledWord[j];
-        button.events.onInputDown.add(spellCheck, this);
-	button.scale.set(buttonScaleX,buttonScaleY);
-	buttonPool.add(button);
-
-        var letterSprite = game.add.text(xPos, yPos, shuffledWord[j], style);
-        letterSprite.anchor.set(0.5);
-	letterPool.add(letterSprite);
-      }
-    
-
-    var deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height - 100, 'deleteButton');
-    deleteButton.inputEnabled = true;
-    deleteButton.anchor.set(0.5);
-    deleteButton.scale.set(buttonScaleX,buttonScaleY);
-    deleteButton.events.onInputDown.add(deleteLetter,this);
-
-    var spellText = "";
-
-    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#AA6339', align: 'center'});
-
-    displaySpelling.anchor.set(0.5);
-
-    console.log('the level is: ' + level);
-
-    function spellCheck(sprite,pointer) {
-      spellText += sprite.data.letter;
-      displaySpelling.setText(spellText);
-      if (spellText == answer) {
-        console.log('you got it!');
-	bonusCount++;
-	if (level === 2 && bonusCount == clickedArray.length) {
-	  startFinalWinFade();
-        } else if (bonusCount == clickedArray.length) {
-	  clickedArray = [];
-	  startBonusWinFade();
-	}  else {
-          clearScreen();
-	  renderBonusItem();
-        }
-      }
-    }
-
-    function deleteLetter(sprite,pointer){
-      spellText = spellText.substring(0, spellText.length - 1);
-      displaySpelling.setText(spellText);
-    } 
-
-    function clearScreen() {
-      console.log('killing all buttons');
-      buttonPool.callAll('kill');
-      console.log('killing all letters');
-      letterPool.callAll('kill');
-      displaySpelling.setText('');
-      wordToCorrect.setText('');
-      promptText.setText('');
-    }
-
-    function startBonusWinFade() { 
-      game.camera.fade(0x000000, 1500, true);
-      game.camera.onFadeComplete.add(bonusWinFadeComplete,this);
-    }
-
-    function bonusWinFadeComplete() {
-      game.time.events.resume();
-      game.state.start('levelUp');
-    }
-
-    function startFinalWinFade() { 
-      game.camera.fade(0x000000, 1500, true);
-      game.camera.onFadeComplete.add(finalWinFadeComplete,this);
-    }
-
-    function finalWinFadeComplete() {
-      game.time.events.resume();
-      game.state.start('win');
-    }
-  }
-
-  renderBonusItem();
-//    game.input.onTap.addOnce(this.start, this);
-  },
-  createTimer: function() {
-    this.timeLabel = this.game.add.text(this.game.world.centerX, 40, '00:00', {font: '4em Arial', fill: '#fff'});
-    this.timeLabel.anchor.setTo(0.5,0);
-    this.timeLabel.align = 'center';
-  },
-
-  start: function() {
-    game.state.start('levelUp');
-  }
-};
-
 var progressState = {
   create: function() {
     level++;
     console.log('LevelUp!!');
     game.stage.backgroundColor = 0x000000;
     var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
-
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
   },
@@ -643,6 +439,7 @@ game.state.add('boot', bootState);
 game.state.add('load', loadState);
 game.state.add('play', playState);
 game.state.add('levelUp', progressState);
-game.state.add('bonus', bonusState);
 game.state.add('win', winState);
 game.state.add('lose', loseState);
+
+game.state.start('boot');
