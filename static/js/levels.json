@@ -5,7 +5,7 @@
 	  "background": "level1Background",
 	  "backgroundWidth": 1024,
 	  "backgroundHeight": 768, 
-	  "mustScore": 100,
+	  "mustScore": 30,
 	  "velocityXlower": -150,
 	  "velocityXhigher": 150,
 	  "velocityYlower": -100,
