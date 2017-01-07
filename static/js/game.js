@@ -35,16 +35,16 @@ function preload() {
 //  game.load.setPreloadSprite(loadingBar);
 
 
-  game.load.text('leveldata', 'static/touchwords/js/levels.json');
+  game.load.text('leveldata', '../static/js/levels.json');
 
-  game.load.image('heart', 'static/touchwords/assets/images/Heart.png');
-  game.load.image('button', 'static/touchwords/assets/images/coloredButton.png');
-  game.load.image('deleteButton', 'static/touchwords/assets/images/deleteButton.png');
+  game.load.image('heart', '../static/assets/images/Heart.png');
+  game.load.image('button', '../static/assets/images/coloredButton.png');
+  game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
 
-  game.load.image('level1Background', 'static/touchwords/assets/images/voodoo_cactus_island_scaled.png');
-  game.load.image('level2Background', 'static/touchwords/assets/images/fishbgexp_scaled.jpg');
-  game.load.image('level3Background', 'static/touchwords/assets/images/cloudsinthedesert_scaled.png');
-  game.load.image('diamond', 'static/touchwords/assets/images/diamond.png');
+  game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
+  game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
+  game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
+  game.load.image('diamond', '../static/assets/images/diamond.png');
 }
 
 var emitter;
