@@ -154,7 +154,8 @@ background.tileScale.y = resizeY;
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
 	word.data = {
-		regular : verbs[words[randomNumber]].regular
+		regular : verbs[words[randomNumber]].regular,
+		answer : verbs[words[randomNumber]].correction
 	}
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
