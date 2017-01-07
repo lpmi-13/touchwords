@@ -442,7 +442,7 @@ var bonusState = {
       var elementHeight = (game.world.height/6);
     
     if (portrait) {
-      var buttonScaleX = (elementWidth * .45)/53;
+      var buttonScaleX = (elementWidth * .55)/53;
       var buttonScaleY = (elementHeight * .45)/40;
     } else {
       var buttonScaleX = (elementWidth * .85)/53;
@@ -590,7 +590,7 @@ var spellText = "";
 //    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
-    this.timeLabel = this.game.add.text(this.game.world.centerX, 40, '00:00', {font: '4em Arial', fill: '#fff'});
+    this.timeLabel = this.game.add.text(this.game.world.centerX, this.game.world.height * .1, '00:00', {font: '4em Arial', fill: '#fff'});
     this.timeLabel.anchor.setTo(0.5,0);
     this.timeLabel.align = 'center';
   },
