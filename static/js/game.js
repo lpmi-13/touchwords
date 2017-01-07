@@ -2,7 +2,6 @@
 var width = screen.width;
 var height = screen.height;
 
-
 var portrait = checkOrientation(width, height)
 
 function logAllThings() {
@@ -15,7 +14,7 @@ function logAllThings() {
 
 
 function checkOrientation(width, height) {
-  return height > width;
+  return height > width; 
 }
 
 if (portrait) {
@@ -36,18 +35,16 @@ function preload() {
 //  game.load.setPreloadSprite(loadingBar);
 
 
-  game.load.text('leveldata', 'static/js/levels.json');
+  game.load.text('leveldata', 'static/touchwords/js/levels.json');
 
-  game.load.image('heart', 'static/assets/images/Heart.png');
+  game.load.image('heart', 'static/touchwords/assets/images/Heart.png');
+  game.load.image('button', 'static/touchwords/assets/images/coloredButton.png');
+  game.load.image('deleteButton', 'static/touchwords/assets/images/deleteButton.png');
 
-  game.load.image('button', 'static/assets/images/coloredButton.png');
-
-  game.load.image('deleteButton', 'static/assets/images/deleteButton.png');
-
-  game.load.image('level1Background', 'static/assets/images/voodoo_cactus_island_scaled.png');
-  game.load.image('level2Background', 'static/assets/images/fishbgexp_scaled.jpg');
-  game.load.image('level3Background', 'static/assets/images/cloudsinthedesert_scaled.png');
-  game.load.image('diamond', 'static/assets/images/diamond.png');
+  game.load.image('level1Background', 'static/touchwords/assets/images/voodoo_cactus_island_scaled.png');
+  game.load.image('level2Background', 'static/touchwords/assets/images/fishbgexp_scaled.jpg');
+  game.load.image('level3Background', 'static/touchwords/assets/images/cloudsinthedesert_scaled.png');
+  game.load.image('diamond', 'static/touchwords/assets/images/diamond.png');
 }
 
 var emitter;
@@ -59,8 +56,6 @@ var wordPool;
 var scorePool;
 var heartPool;
 var clickedArray = [];
-//var vowelArray = ['a','e','i','o','u','y'];
-//var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -165,8 +160,6 @@ background.tileScale.y = resizeY;
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
 
-	console.log(word.data.answer);
-
 	word.body.velocity.setTo(game.rnd.integerInRange(levelVars.velocityXlower,levelVars.velocityXhigher),game.rnd.integerInRange(levelVars.velocityYlower,levelVars.velocityYhigher));
 	word.body.collideWorldBounds = true;
 	word.body.bounce.set(1);
@@ -184,12 +177,13 @@ background.tileScale.y = resizeY;
 
   function test(sprite, pointer) {
       if (!sprite.data.regular) {
-	  clickedArray.push({text:sprite.text,answer:sprite.data.answer});
+          clickedArray.push({text:sprite.text,answer:sprite.data.answer});
 	  diamondBurst(sprite);
           addScore(sprite);
   	  score += 10;
 	  scoreText.setText('Points: ' + score + '/' + levelVars.mustScore);	  
-              
+//	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
+  //            winTransition();
           if (score == levelVars.mustScore) {
 	      levelUpTransition();
 	  }
@@ -203,7 +197,7 @@ background.tileScale.y = resizeY;
 //  function winTransition() {
 //    wordPool.callAll('kill');
 //    if (portrait) {
-//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.3em Georgia',fill:'#0095DD'});
+//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
 //    } else {
 //      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
 //    }
@@ -224,7 +218,7 @@ background.tileScale.y = resizeY;
     game.state.start('win');
   }
 
-  function levelUpTransition(level) {
+  function levelUpTransition() {
     wordPool.callAll('kill');
 
     if (portrait) {
@@ -303,8 +297,8 @@ function update() {
 var bootState = {
   
   preload: function() {
-    game.load.image('logo','static/assets/images/logo.png');
-    game.load.image('preloader', 'static/assets/images/loading.png');
+    game.load.image('logo','static/touchwords/assets/images/logo.png');
+    game.load.image('preloader', 'static/touchwords/assets/images/loading.png');
 
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
@@ -360,6 +354,8 @@ var loadState = {
     game.scale.pageAlignVertically = true;
   
     game.scale.refresh();
+
+    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
     if (portrait){
       var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
@@ -428,16 +424,14 @@ var bonusState = {
 
     var gameTimer = game.time.events.loop(100, updateTimer, this);
 
-
-
     var buttonPool = game.add.group();
     buttonPool.enableBody = true;
-    var letterPool = game.add.group();    
+    var letterPool = game.add.group();
     var numberOfElements = 6;
 
     if (portrait) {
-      var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .1;
+      var style = {font: '3.5em Arial', fill: '#000000', align: 'center'};
+      var screenGutterWidth = gameWidth * .075;
       var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
     } else {
       var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
@@ -446,15 +440,20 @@ var bonusState = {
     }
 
       var elementHeight = (game.world.height/6);
-
+    
+    if (portrait) {
+      var buttonScaleX = (elementWidth * .45)/53;
+      var buttonScaleY = (elementHeight * .45)/40;
+    } else {
       var buttonScaleX = (elementWidth * .85)/53;
       var buttonScaleY = (elementHeight * .85)/40;
-	console.log('game.world.width = ' + game.world.width);
-	console.log('game width: ' + gameWidth);
-	console.log('number of elements: ' + numberOfElements);
-	console.log('element width: ' + elementWidth);
-	console.log('buttonScaleX: ' + buttonScaleX);
-	console.log('buttonScaleY: ' + buttonScaleY);
+    }
+        console.log('game.world.width = ' + game.world.width);
+        console.log('game width: ' + gameWidth);
+        console.log('number of elements: ' + numberOfElements);
+        console.log('element width: ' + elementWidth);
+        console.log('buttonScaleX: ' + buttonScaleX);
+        console.log('buttonScaleY: ' + buttonScaleY);
 
     function renderBonusItem() {
       console.log('the current count is: ' + bonusCount);
@@ -473,41 +472,47 @@ var bonusState = {
 
       var shuffledWord = shuffle(mixedArray);
 
+    if (portrait) {
+      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+    } else {
       var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
+    }
+
       promptText.anchor.set(0.5);
-      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'}); 
       wordToCorrect.anchor.set(0.5);
       wordToCorrect.stroke = 'AA9239';
       wordToCorrect.strokeThickness = 3;
 
 
       for (var j = 0; j < shuffledWord.length; j++) {
-	var row = Math.floor(j / numberOfElements);
-	var column = Math.floor(j % numberOfElements);
+        var row = Math.floor(j / numberOfElements);
+        var column = Math.floor(j % numberOfElements);
 
 //        console.log('row is ' + row);
-//	console.log('column is ' + column);
+//      console.log('column is ' + column);
 
-	var xPos = (column * elementWidth) + screenGutterWidth;
-	var yPos = (game.world.height - 100) - (row * elementHeight);
+        var xPos = (column * elementWidth) + screenGutterWidth;
+        var yPos = (game.world.height - 100) - (row * elementHeight);
 
-//	console.log('xPos is ' + xPos);
-	console.log('yPos is ' + yPos);
-	console.log('game.world.height - 100 = ' + (game.world.height - 100));
+//      console.log('xPos is ' + xPos);
+        console.log('yPos is ' + yPos);
+        console.log('game.world.height - 100 = ' + (game.world.height - 100));
 
         var button = game.add.sprite(xPos, yPos, 'button');
         button.anchor.set(0.5);
         button.inputEnabled = true;
-	button.data.letter = shuffledWord[j];
+        button.data.letter = shuffledWord[j];
         button.events.onInputDown.add(spellCheck, this);
-	button.scale.set(buttonScaleX,buttonScaleY);
-	buttonPool.add(button);
+        button.scale.set(buttonScaleX,buttonScaleY);
+        buttonPool.add(button);
 
         var letterSprite = game.add.text(xPos, yPos, shuffledWord[j], style);
         letterSprite.anchor.set(0.5);
-	letterPool.add(letterSprite);
+        letterPool.add(letterSprite);
       }
-    
+
 
     var deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height - 100, 'deleteButton');
     deleteButton.inputEnabled = true;
@@ -515,9 +520,13 @@ var bonusState = {
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
-    var spellText = "";
+var spellText = "";
 
+  if (portrait) {
+    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"4em Georgia", fill: '#AA6339', align: 'center'});
+  } else {
     var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#AA6339', align: 'center'});
+  }
 
     displaySpelling.anchor.set(0.5);
 
@@ -528,15 +537,15 @@ var bonusState = {
       displaySpelling.setText(spellText);
       if (spellText == answer) {
         console.log('you got it!');
-	bonusCount++;
-	if (level === 2 && bonusCount == clickedArray.length) {
-	  startFinalWinFade();
+        bonusCount++;
+        if (level === 2 && bonusCount == clickedArray.length) {
+          startFinalWinFade();
         } else if (bonusCount == clickedArray.length) {
-	  clickedArray = [];
-	  startBonusWinFade();
-	}  else {
+          clickedArray = [];
+          startBonusWinFade();
+        }  else {
           clearScreen();
-	  renderBonusItem();
+          renderBonusItem();
         }
       }
     }
@@ -544,7 +553,7 @@ var bonusState = {
     function deleteLetter(sprite,pointer){
       spellText = spellText.substring(0, spellText.length - 1);
       displaySpelling.setText(spellText);
-    } 
+    }
 
     function clearScreen() {
       console.log('killing all buttons');
@@ -556,7 +565,7 @@ var bonusState = {
       promptText.setText('');
     }
 
-    function startBonusWinFade() { 
+    function startBonusWinFade() {
       game.camera.fade(0x000000, 1500, true);
       game.camera.onFadeComplete.add(bonusWinFadeComplete,this);
     }
@@ -566,7 +575,7 @@ var bonusState = {
       game.state.start('levelUp');
     }
 
-    function startFinalWinFade() { 
+    function startFinalWinFade() {
       game.camera.fade(0x000000, 1500, true);
       game.camera.onFadeComplete.add(finalWinFadeComplete,this);
     }
@@ -591,13 +600,13 @@ var bonusState = {
   }
 };
 
+
 var progressState = {
   create: function() {
     level++;
     console.log('LevelUp!!');
     game.stage.backgroundColor = 0x000000;
     var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
-
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
   },
@@ -646,3 +655,5 @@ game.state.add('levelUp', progressState);
 game.state.add('bonus', bonusState);
 game.state.add('win', winState);
 game.state.add('lose', loseState);
+
+game.state.start('boot');
