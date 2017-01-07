@@ -430,8 +430,8 @@ var bonusState = {
     var numberOfElements = 6;
 
     if (portrait) {
-      var style = {font: '4.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .1;
+      var style = {font: '3.5em Arial', fill: '#000000', align: 'center'};
+      var screenGutterWidth = gameWidth * .075;
       var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
     } else {
       var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
@@ -440,9 +440,14 @@ var bonusState = {
     }
 
       var elementHeight = (game.world.height/6);
-
+    
+    if (portrait) {
+      var buttonScaleX = (elementWidth * .45)/53;
+      var buttonScaleY = (elementHeight * .45)/40;
+    } else {
       var buttonScaleX = (elementWidth * .85)/53;
       var buttonScaleY = (elementHeight * .85)/40;
+    }
         console.log('game.world.width = ' + game.world.width);
         console.log('game width: ' + gameWidth);
         console.log('number of elements: ' + numberOfElements);
@@ -467,9 +472,15 @@ var bonusState = {
 
       var shuffledWord = shuffle(mixedArray);
 
+    if (portrait) {
+      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+    } else {
       var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
-      promptText.anchor.set(0.5);
       var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
+    }
+
+      promptText.anchor.set(0.5);
       wordToCorrect.anchor.set(0.5);
       wordToCorrect.stroke = 'AA9239';
       wordToCorrect.strokeThickness = 3;
@@ -511,7 +522,11 @@ var bonusState = {
 
 var spellText = "";
 
+  if (portrait) {
+    var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"4em Georgia", fill: '#AA6339', align: 'center'});
+  } else {
     var displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#AA6339', align: 'center'});
+  }
 
     displaySpelling.anchor.set(0.5);
 
