@@ -590,7 +590,7 @@ var spellText = "";
 //    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
-    this.timeLabel = this.game.add.text(this.game.world.centerX, this.game.world.height * .1, '00:00', {font: '4em Arial', fill: '#fff'});
+    this.timeLabel = this.game.add.text(this.game.world.centerX, this.game.world.height * .05, '00:00', {font: '4em Arial', fill: '#fff'});
     this.timeLabel.anchor.setTo(0.5,0);
     this.timeLabel.align = 'center';
   },
