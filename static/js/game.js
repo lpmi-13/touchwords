@@ -473,8 +473,8 @@ var bonusState = {
       var shuffledWord = shuffle(mixedArray);
 
     if (portrait) {
-      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
-      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+      var promptText = game.add.text(game.world.centerX, game.world.height * .3, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .4, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
     } else {
       var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
       var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
