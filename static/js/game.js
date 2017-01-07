@@ -297,8 +297,8 @@ function update() {
 var bootState = {
   
   preload: function() {
-    game.load.image('logo','static/touchwords/assets/images/logo.png');
-    game.load.image('preloader', 'static/touchwords/assets/images/loading.png');
+    game.load.image('logo','../static/assets/images/logo.png');
+    game.load.image('preloader', '../static/assets/images/loading.png');
 
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
