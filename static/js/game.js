@@ -39,7 +39,7 @@ function preload() {
 
   game.load.image('heart', 'static/touchwords/assets/images/Heart.png');
   game.load.image('button', 'static/touchwords/assets/images/coloredButton.png');
-  game.load.image('deleteButton', 'static/touchwords/assets/images/coloredButton.png');
+  game.load.image('deleteButton', 'static/touchwords/assets/images/deleteButton.png');
 
   game.load.image('level1Background', 'static/touchwords/assets/images/voodoo_cactus_island_scaled.png');
   game.load.image('level2Background', 'static/touchwords/assets/images/fishbgexp_scaled.jpg');
