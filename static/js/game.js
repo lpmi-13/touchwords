@@ -51,11 +51,15 @@ var emitter;
 var level = 0;
 var scoreText;
 var score = 0;
+var progressText;
+var progress = 0;
 var livesPool;
 var wordPool;
 var scorePool;
 var heartPool;
 var clickedArray = [];
+var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
+var vowelArray = ['a','e','i','o','u'];
 
 function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -79,7 +83,9 @@ console.log('resizeY is ' + resizeY);
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
-  scoreText = game.add.text(5,5, 'Points: 0/' + levelVars.mustScore , {font: '1.8em Georgia', fill: '#0095DD'});
+  progressText = game.add.text(5,5, 'Total: 0/' + levelVars.progressTotal , {font: '1.8em Georgia', fill: '#0095DD'});
+
+  scoreText = game.add.text(game.world.centerX, 5, 'Points: ', {font: '1.8em Georgia', fill: '#0095DD'});
 
   heartPool = game.add.group();
 
@@ -181,10 +187,10 @@ background.tileScale.y = resizeY;
 	  diamondBurst(sprite);
           addScore(sprite);
   	  score += 10;
-	  scoreText.setText('Points: ' + score + '/' + levelVars.mustScore);	  
-//	  if (levelVars.title == 'level3' && score == levelVars.mustScore) {
-  //            winTransition();
-          if (score == levelVars.mustScore) {
+	  scoreText.setText('Points: ' + score);
+	  progress += 1; 
+          progressText.setText('Total: ' + progress + '/' + levelVars.progressTotal);
+	  if (progress == levelVars.progressTotal) {
 	      levelUpTransition();
 	  }
 	  sprite.kill();
@@ -377,8 +383,9 @@ var loadState = {
 var playState = {
   create: function() {
     console.log('Playstate');
-    score = 0;
-    create();
+   // score = 0;
+    progress = 0;   
+ create();
   },
   update: function() {
     update();
@@ -427,16 +434,16 @@ var bonusState = {
     var buttonPool = game.add.group();
     buttonPool.enableBody = true;
     var letterPool = game.add.group();
-    var numberOfElements = 6;
+    var numberOfRowElements = 6;
 
     if (portrait) {
       var style = {font: '3.5em Arial', fill: '#000000', align: 'center'};
       var screenGutterWidth = gameWidth * .075;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
+      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
     } else {
       var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
       var screenGutterWidth = gameWidth * .2;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfElements;
+      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
     }
 
       var elementHeight = (game.world.height/6);
@@ -450,7 +457,7 @@ var bonusState = {
     }
         console.log('game.world.width = ' + game.world.width);
         console.log('game width: ' + gameWidth);
-        console.log('number of elements: ' + numberOfElements);
+        console.log('number of elements: ' + numberOfRowElements);
         console.log('element width: ' + elementWidth);
         console.log('buttonScaleX: ' + buttonScaleX);
         console.log('buttonScaleY: ' + buttonScaleY);
@@ -465,10 +472,19 @@ var bonusState = {
       console.log(wordItem);
 
       var uniqueArray = displayArray.filter(function(obj) {
-        return wordItem.indexOf(obj) == -1
+        return wordItem.indexOf(obj) == -1;
       });
 
+      var numberOfTotalLetters = numberOfRowElements * 2;
+
+
       var mixedArray = unique(wordItem.concat(uniqueArray));
+      var numberOfExisitingLetters = mixedArray.length;
+
+      for (var x = 0; x < numberOfTotalLetters - numberOfExistingLetters; x++) {
+	var arrayNumber = game.rnd.integerInRange(0, vowelArray.length - 1);
+	mixedArray.push(vowelArray[arrayNumber];
+      }
 
       var shuffledWord = shuffle(mixedArray);
 
@@ -487,8 +503,8 @@ var bonusState = {
 
 
       for (var j = 0; j < shuffledWord.length; j++) {
-        var row = Math.floor(j / numberOfElements);
-        var column = Math.floor(j % numberOfElements);
+        var row = Math.floor(j / numberOfRowElements);
+        var column = Math.floor(j % numberOfRowElements);
 
 //        console.log('row is ' + row);
 //      console.log('column is ' + column);
@@ -539,9 +555,11 @@ var spellText = "";
         console.log('you got it!');
         bonusCount++;
         if (level === 2 && bonusCount == clickedArray.length) {
+	  //stopClockCountPoint();
           startFinalWinFade();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
+	  //stopClockCountPoints();
           startBonusWinFade();
         }  else {
           clearScreen();
@@ -627,6 +645,7 @@ var winState = {
   },
   start: function() {
     level = 0;
+    score = 0;
     game.state.start('play');
   }
 };
@@ -644,6 +663,7 @@ var loseState = {
   },
   start: function() {
     level = 0;
+    score = 0;
     game.state.start('play');
   }
 };
