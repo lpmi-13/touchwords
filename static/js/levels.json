@@ -1,11 +1,11 @@
 {
-	"levelVariables" : 
+	"levelVariables" :
     [
 	{ "title": "level1",
 	  "background": "level1Background",
 	  "backgroundWidth": 1024,
 	  "backgroundHeight": 768, 
-	  "progressTotal": 10$,
+	  "progressTotal": 10,
 	  "velocityXlower": -150,
 	  "velocityXhigher": 150,
 	  "velocityYlower": -100,

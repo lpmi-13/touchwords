@@ -35,7 +35,6 @@ function preload() {
 //  game.load.setPreloadSprite(loadingBar);
 
 
-<<<<<<< HEAD
   game.load.text('leveldata', '../static/js/levels.json');
 
   game.load.image('heart', '../static/assets/images/Heart.png');
@@ -86,7 +85,8 @@ background.tileScale.y = resizeY;
 
   progressText = game.add.text(5,5, 'Total: 0/' + levelVars.progressTotal , {font: '1.8em Georgia', fill: '#0095DD'});
 
-  scoreText = game.add.text(game.world.centerX, 5, 'Points: ', {font: '1.8em Georgia', fill: '#0095DD'});
+  scoreText = game.add.text(game.world.centerX, 5, 'Points: '+ score, {font: '2.8em Georgia', fill: '#0095DD'});
+  scoreText.anchor.set(1,0);
 
   heartPool = game.add.group();
 
@@ -399,12 +399,16 @@ var bonusState = {
     console.log(clickedArray);
     game.stage.backgroundColor = '#2B4970';
     var bonusCount = 0;
-    var text;
-    var square;
+    var minutes;
+    var seconds;
+
 
     var gameWidth = game.world.width;
     var gameHeight = game.world.height;
 
+    var bonusScoreText = game.add.text(game.world.centerX, 5, 'Points: ', {font: '2.8em Georgia', fill: '#dc9a41'});
+    bonusScoreText.setText('Points: ' + score);
+    bonusScoreText.anchor.set(1,1);
 
     this.startTime = new Date();
     this.totalTime = 120;
@@ -420,8 +424,8 @@ var bonusState = {
       this.timeElapsed = Math.abs(timeDifference / 1000);
 
       var timeRemaining = this.totalTime - this.timeElapsed;
-      var minutes = Math.floor(timeRemaining / 60);
-      var seconds = Math.floor(timeRemaining) - (60 * minutes);
+      minutes = Math.floor(timeRemaining / 60);
+      seconds = Math.floor(timeRemaining) - (60 * minutes);
 
       var result = (minutes < 10) ? '0' + minutes : minutes;
 
@@ -480,11 +484,11 @@ var bonusState = {
 
 
       var mixedArray = unique(wordItem.concat(uniqueArray));
-      var numberOfExisitingLetters = mixedArray.length;
+      var numberOfExistingLetters = mixedArray.length;
 
       for (var x = 0; x < numberOfTotalLetters - numberOfExistingLetters; x++) {
 	var arrayNumber = game.rnd.integerInRange(0, vowelArray.length - 1);
-	mixedArray.push(vowelArray[arrayNumber];
+	mixedArray.push(vowelArray[arrayNumber]);
       }
 
       var shuffledWord = shuffle(mixedArray);
@@ -556,17 +560,23 @@ var spellText = "";
         console.log('you got it!');
         bonusCount++;
         if (level === 2 && bonusCount == clickedArray.length) {
-	  //stopClockCountPoint();
+	  stopClockCountPoints();
           startFinalWinFade();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
-	  //stopClockCountPoints();
+	  stopClockCountPoints();
           startBonusWinFade();
         }  else {
           clearScreen();
           renderBonusItem();
         }
       }
+    }
+
+    function stopClockCountPoints() {
+	game.time.events.pause();
+	console.log('remaining minutes: ' + minutes);
+	console.log('remaining seconds: ' + seconds);
     }
 
     function deleteLetter(sprite,pointer){
