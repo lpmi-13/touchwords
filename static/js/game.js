@@ -442,7 +442,7 @@ var bonusState = {
     var numberOfRowElements = 6;
 
     if (portrait) {
-      var style = {font: '3.5em Arial', fill: '#000000', align: 'center'};
+      var style = {font: '3.8em Arial', fill: '#000000', align: 'center'};
       var screenGutterWidth = gameWidth * .075;
       var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
     } else {
@@ -454,8 +454,8 @@ var bonusState = {
       var elementHeight = (game.world.height/6);
     
     if (portrait) {
-      var buttonScaleX = (elementWidth * .45)/53;
-      var buttonScaleY = (elementHeight * .45)/40;
+      var buttonScaleX = (elementWidth * .65)/53;
+      var buttonScaleY = (elementHeight * .55)/40;
     } else {
       var buttonScaleX = (elementWidth * .85)/53;
       var buttonScaleY = (elementHeight * .85)/40;
