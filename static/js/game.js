@@ -17,12 +17,9 @@ function checkOrientation(width, height) {
   return height > width; 
 }
 
-if (portrait) {
-  var game = new Phaser.Game(width*.8,height*.7, Phaser.CANVAS, 'gameDiv', {preload: preload, create: create, update: update});
-  } else {
+  var heightMultiplier = portrait ? .7 : .75;
+  var game = new Phaser.Game(width * .8, height * heightMultiplier, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
-  var game = new Phaser.Game(width*.8, height*.75, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
-  }
 
 function preload() {
 
@@ -38,7 +35,7 @@ function preload() {
   game.load.text('leveldata', '../static/js/levels.json');
 
   game.load.image('heart', '../static/assets/images/Heart.png');
-  game.load.image('button', '../static/assets/images/coloredButton.png');
+  game.load.image('button', '../static/assets/images/roundedColoredButton.png');
   game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
 
   game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
@@ -51,7 +48,7 @@ var emitter;
 var level = 0;
 var scoreText;
 var score = 0;
-var progressText;
+//var progressText;
 var progress = 0;
 var livesPool;
 var wordPool;
@@ -75,18 +72,14 @@ var resizeX = game.world.width/levelVars.backgroundWidth;
 var resizeY = game.world.height/levelVars.backgroundHeight;
 
 logAllThings();
-console.log('the backgroundWidth = ' + levelVars.backgroundWidth);
-console.log('the backgroundHeight = ' + levelVars.backgroundHeight);
 
-console.log('resizeX is ' + resizeX);
-console.log('resizeY is ' + resizeY);
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
-  progressText = game.add.text(5,5, 'Total: 0/' + levelVars.progressTotal , {font: '1.8em Georgia', fill: '#0095DD'});
+  //progressText = game.add.text(5,5, 'Total: 0/' + levelVars.progressTotal , {font: '1.8em Georgia', fill: '#0095DD'});
 
-  scoreText = game.add.text(game.world.centerX, 5, 'Points: '+ score, {font: '2.8em Georgia', fill: '#0095DD'});
-  scoreText.anchor.set(1,0);
+  scoreText = game.add.text(5, 5, 'Points: '+ score, {font: '2.8em Georgia', fill: '#0095DD'});
+//  scoreText.anchor.set(1,0);
 
   heartPool = game.add.group();
 
@@ -190,7 +183,7 @@ background.tileScale.y = resizeY;
   	  score += 10;
 	  scoreText.setText('Points: ' + score);
 	  progress += 1; 
-          progressText.setText('Total: ' + progress + '/' + levelVars.progressTotal);
+          //progressText.setText('Total: ' + progress + '/' + levelVars.progressTotal);
 	  if (progress == levelVars.progressTotal) {
 	      levelUpTransition();
 	  }
@@ -200,20 +193,6 @@ background.tileScale.y = resizeY;
 	  loseLife();
       }
   }
-
-//  function winTransition() {
-//    wordPool.callAll('kill');
-//    if (portrait) {
-//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
-//    } else {
-//      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '8em Georgia', fill: '#0095DD'});
-//    }
-    
-//    levelUpText.anchor.set(0.5);
-//    var tweenTransition = game.add.tween(levelUpText).to( {y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
-//    game.time.events.pause();
-//    tweenTransition.onComplete.add(startWinFade, this);
-//  }
 
   function startWinFade() { 
     game.camera.fade(0x000000, 1500, true);
@@ -402,13 +381,12 @@ var bonusState = {
     var minutes;
     var seconds;
 
-
     var gameWidth = game.world.width;
     var gameHeight = game.world.height;
 
-    var bonusScoreText = game.add.text(game.world.centerX, 5, 'Points: ', {font: '2.8em Georgia', fill: '#dc9a41'});
+    var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: '3em Georgia', fill: '#ffffff'});
     bonusScoreText.setText('Points: ' + score);
-    bonusScoreText.anchor.set(1,1);
+//    bonusScoreText.anchor.set(1,1);
 
     this.startTime = new Date();
     this.totalTime = 120;
@@ -454,18 +432,12 @@ var bonusState = {
       var elementHeight = (game.world.height/6);
     
     if (portrait) {
-      var buttonScaleX = (elementWidth * .65)/53;
-      var buttonScaleY = (elementHeight * .55)/40;
+      var buttonScaleX = (elementWidth * .75)/53;
+      var buttonScaleY = (elementHeight * .65)/40;
     } else {
       var buttonScaleX = (elementWidth * .85)/53;
       var buttonScaleY = (elementHeight * .85)/40;
     }
-        console.log('game.world.width = ' + game.world.width);
-        console.log('game width: ' + gameWidth);
-        console.log('number of elements: ' + numberOfRowElements);
-        console.log('element width: ' + elementWidth);
-        console.log('buttonScaleX: ' + buttonScaleX);
-        console.log('buttonScaleY: ' + buttonScaleY);
 
     function renderBonusItem() {
       console.log('the current count is: ' + bonusCount);
@@ -487,40 +459,37 @@ var bonusState = {
       var numberOfExistingLetters = mixedArray.length;
 
       for (var x = 0; x < numberOfTotalLetters - numberOfExistingLetters; x++) {
-	var arrayNumber = game.rnd.integerInRange(0, vowelArray.length - 1);
-	mixedArray.push(vowelArray[arrayNumber]);
+	var vowelArrayNumber = game.rnd.integerInRange(0, vowelArray.length - 1);
+	var consonantArrayNumber = game.rnd.integerInRange(0, consonantArray.length - 1);
+	if (mixedArray.indexOf(vowelArray[vowelArrayNumber]) > -1) {
+	  mixedArray.push(consonantArray[consonantArrayNumber]);
+	} else {
+	  mixedArray.push(vowelArray[vowelArrayNumber]);
+	}
       }
 
       var shuffledWord = shuffle(mixedArray);
 
     if (portrait) {
-      var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
-      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+      var promptText = game.add.text(game.world.centerX, game.world.height * .3, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+      var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .4, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
     } else {
       var promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
       var wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
     }
 
       promptText.anchor.set(0.5);
+      promptText.stroke = 'AA9239';
+      promptText.strokeThickness = 3;
       wordToCorrect.anchor.set(0.5);
-      wordToCorrect.stroke = 'AA9239';
-      wordToCorrect.strokeThickness = 3;
 
 
       for (var j = 0; j < shuffledWord.length; j++) {
         var row = Math.floor(j / numberOfRowElements);
         var column = Math.floor(j % numberOfRowElements);
 
-//        console.log('row is ' + row);
-//      console.log('column is ' + column);
-
         var xPos = (column * elementWidth) + screenGutterWidth;
-        var yPos = (game.world.height - 100) - (row * elementHeight);
-
-//      console.log('xPos is ' + xPos);
-        console.log('yPos is ' + yPos);
-        console.log('game.world.height - 100 = ' + (game.world.height - 100));
-
+        var yPos = (game.world.height * .9 ) - (row * elementHeight);
         var button = game.add.sprite(xPos, yPos, 'button');
         button.anchor.set(0.5);
         button.inputEnabled = true;
@@ -535,7 +504,7 @@ var bonusState = {
       }
 
 
-    var deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height - 100, 'deleteButton');
+    var deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height * .9, 'deleteButton');
     deleteButton.inputEnabled = true;
     deleteButton.anchor.set(0.5);
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
@@ -560,12 +529,10 @@ var spellText = "";
         console.log('you got it!');
         bonusCount++;
         if (level === 2 && bonusCount == clickedArray.length) {
-	  stopClockCountPoints();
-          startFinalWinFade();
+	  stopClockCountPointsFinal();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
 	  stopClockCountPoints();
-          startBonusWinFade();
         }  else {
           clearScreen();
           renderBonusItem();
@@ -574,14 +541,33 @@ var spellText = "";
     }
 
     function stopClockCountPoints() {
-	game.time.events.pause();
-	console.log('remaining minutes: ' + minutes);
-	console.log('remaining seconds: ' + seconds);
+	game.time.events.add(Phaser.Timer.SECOND * 3, startBonusWinFade, this );
+	var totalSeconds = (minutes * 60) + seconds;
+	var totalPointsToAdd = totalSeconds * 10;
+	console.log('adding ' + totalPointsToAdd + ' points');
+	score += totalPointsToAdd;
+	//timeLabel.text = '00:00';
+ 	bonusScoreText.setText('Points: ' + score);
+	destroyTimer();   
+    }
+
+    function stopClockCountPointsFinal() {
+	game.time.events.add(Phaser.Timer.SECOND * 3, startFinalWinFade, this);
+	var totalSeconds = (minutes * 60) + seconds;
+	var totalPointsToAdd = totalSeconds + 10;
+	score += totalPointsToAdd;
+	//timeLabel.text = '00:00';
+	bonusScoreText.setText('Points: ' + score);
+	destroyTimer();
     }
 
     function deleteLetter(sprite,pointer){
       spellText = spellText.substring(0, spellText.length - 1);
       displaySpelling.setText(spellText);
+    }
+
+    function destroyTimer() {
+      timeLabel.destroy();
     }
 
     function clearScreen() {
@@ -619,7 +605,7 @@ var spellText = "";
 //    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
-    this.timeLabel = this.game.add.text(this.game.world.centerX, this.game.world.height * .05, '00:00', {font: '4em Arial', fill: '#fff'});
+    this.timeLabel = this.game.add.text(this.game.world.centerX, this.game.world.height * .1, '00:00', {font: '4em Arial', fill: '#fff'});
     this.timeLabel.anchor.setTo(0.5,0);
     this.timeLabel.align = 'center';
   },
