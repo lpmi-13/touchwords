@@ -1,7 +1,6 @@
 
 var width = screen.width;
 var height = screen.height;
-
 var portrait = checkOrientation(width, height)
 
 function logAllThings() {
@@ -21,7 +20,7 @@ function checkOrientation(width, height) {
   var game = new Phaser.Game(width * .8, height * heightMultiplier, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
 
-function preload() {
+//function preload() {
 
 
 //  var loadingBar = game.add.sprite(0, game.world.height - 100, 'preloader');
@@ -32,17 +31,17 @@ function preload() {
 //  game.load.setPreloadSprite(loadingBar);
 
 
-  game.load.text('leveldata', '../static/js/levels.json');
+//  game.load.text('leveldata', '../static/js/levels.json');
 
-  game.load.image('heart', '../static/assets/images/Heart.png');
-  game.load.image('button', '../static/assets/images/roundedColoredButton.png');
-  game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
+ // game.load.image('heart', '../static/assets/images/Heart.png');
+//  game.load.image('button', '../static/assets/images/roundedColoredButton.png');
+//  game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
 
-  game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
-  game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
-  game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
-  game.load.image('diamond', '../static/assets/images/diamond.png');
-}
+//  game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
+//  game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
+//  game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
+//  game.load.image('diamond', '../static/assets/images/diamond.png');
+//}
 
 var emitter;
 var level = 0;
@@ -275,97 +274,58 @@ background.tileScale.y = resizeY;
 
 }
 
-function update() {
-  
-}
+//var bootState = {
 
+//  preload: function() {
+//    game.load.image('logo','../static/assets/images/logo.png');
+//    game.load.image('preloader', '../static/assets/images/loading.png');
 
-var bootState = {
-  
-  preload: function() {
-    game.load.image('logo','../static/assets/images/logo.png');
-    game.load.image('preloader', '../static/assets/images/loading.png');
+//    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+//    game.scale.pageAlignHorizontally = true;
+//    game.scale.pageAlignVertically = true;  
 
-    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.scale.pageAlignHorizontally = true;
-    game.scale.pageAlignVertically = true;  
+//},
 
-},
-
-  create: function() {
-    console.log("Bootstate");
+//  create: function() {
+//    console.log("Bootstate");
 //    logAllThings();
-    if (portrait){
-      var logoWidth = 296;
-      var logoHeight = 207;
-      var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
-      gameLogo.anchor.set(0.5);
-      var resizeX = (game.world.width/logoWidth);
-      var resizeY = (game.world.height/logoHeight)/2;
-      gameLogo.scale.setTo(resizeX,resizeY);
+//    if (portrait){
+//      var logoWidth = 296;
+//      var logoHeight = 207;
+//      var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
+//      gameLogo.anchor.set(0.5);
+//      var resizeX = (game.world.width/logoWidth);
+//      var resizeY = (game.world.height/logoHeight)/2;
+//      gameLogo.scale.setTo(resizeX,resizeY);
 
-    } else {
-      var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
-      gameLogo.anchor.set(0.5);
-    } 
+//    } else {
+//      var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
+//      gameLogo.anchor.set(0.5);
+//    } 
    
-    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-    touchToStart.anchor.set(0.5);
+//    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+//    touchToStart.anchor.set(0.5);
     
-    touchToStart.alpha = 1;
-    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
-    textTween.yoyo(true, 300);
+//    touchToStart.alpha = 1;
+//    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
+//    textTween.yoyo(true, 300);
     
-    game.input.onTap.addOnce(this.start, this);
+//    game.input.onTap.addOnce(this.start, this);
     
-  },
+//  },
 
 
-  start: function() {
-    game.state.start('load');
-  }
-};
-
-var loadState = {
-  preload: function() {
-    preload();
-  },
-  create: function() {
-    console.log('Loadstate');
-
-    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-  
-    game.scale.pageAlignHorizontally = true;
-    game.scale.pageAlignVertically = true;
-  
-    game.scale.refresh();
-
-    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
-
-    if (portrait){
-      var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    } else { 
-      var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    }
-  },
-  
-  start: function() {
-    game.state.start('play');
-  }
-
-};
+//  start: function() {
+//    game.state.start('load');
+//  }
+//};
 
 var playState = {
   create: function() {
     console.log('Playstate');
    // score = 0;
     progress = 0;   
- create();
+    create();
   },
   update: function() {
     update();
@@ -665,8 +625,11 @@ var loseState = {
   }
 };
 
-game.state.add('boot', bootState);
-game.state.add('load', loadState);
+//game.state.add('boot', bootState);
+game.state.add('boot', Touchwords.Boot);
+//game.state.add('load', loadState);
+game.state.add('load', Touchwords.Preloader);
+game.state.add('midload', Touchwords.Midloader);
 game.state.add('play', playState);
 game.state.add('levelUp', progressState);
 game.state.add('bonus', bonusState);
