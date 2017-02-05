@@ -469,7 +469,6 @@ var bonusState = {
       lossText.anchor.setTo(0.5);
       game.time.events.add(Phaser.Timer.SECOND * 3, startBonusLossFade, this );
       }
-
     var gameTimer = game.time.events.loop(100, updateTimer, this);
 
     var buttonPool = game.add.group();
@@ -640,7 +639,8 @@ var spellText = "";
 	score += totalPointsToAdd;
  	bonusScoreText.setText('Points: ' + score);
 	timeLabel.addColor('#2B4970', 0);
-//	destroyTimer();   
+	destroyTimer();
+        game.time.events.remove(gameTimer);
     }
 
     function stopClockCountPointsFinal() {
@@ -656,7 +656,8 @@ var spellText = "";
 	score += totalPointsToAdd;
 	bonusScoreText.setText('Points: ' + score);
         timeLabel.addColor('#2B4970');
-//	destroyTimer();
+	destroyTimer();
+        game.time.events.remove(gameTimer);
     }
 
     function deleteLetter(sprite,pointer){
