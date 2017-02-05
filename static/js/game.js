@@ -454,8 +454,8 @@ var bonusState = {
 
     function timeExpired() {
       timeLabel.destroy();
-      var timeExpired = game.add.text(this.game.world.centerX, 0, '00:00', {font: '4em Arial', fill: '#ff0000'});
-      timeExpired.anchor.set(0.5, 0);
+      var timeExpired = game.add.text(this.game.world.width - 5, 0, '00:00', {font: '4em Arial', fill: '#ff0000'});
+      timeExpired.anchor.set(1, 0);
 //      startBonusLossFade();
       
       buttonPool.callAll('kill');
@@ -655,7 +655,8 @@ var spellText = "";
 	var totalPointsToAdd = totalSeconds + 10;
 	score += totalPointsToAdd;
 	bonusScoreText.setText('Points: ' + score);
-	destroyTimer();
+        timeLabel.addColor('#2B4970');
+//	destroyTimer();
     }
 
     function deleteLetter(sprite,pointer){
@@ -702,8 +703,8 @@ var spellText = "";
 //    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
-    timeLabel = game.add.text(this.game.world.centerX, 0, '00:00', {font: '4em Arial', fill: '#fff'});
-    timeLabel.anchor.setTo(0.5,0);
+    timeLabel = game.add.text(this.game.world.width - 5, 0, '00:00', {font: '4em Arial', fill: '#fff'});
+    timeLabel.anchor.setTo(1,0);
     timeLabel.align = 'center';
   },
 
