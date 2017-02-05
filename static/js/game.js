@@ -20,28 +20,8 @@ function checkOrientation(width, height) {
   var heightMultiplier = portrait ? .7 : .75;
   var game = new Phaser.Game(width * .8, height * heightMultiplier, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
-
 function preload() {
-
-
-//  var loadingBar = game.add.sprite(0, game.world.height - 100, 'preloader');
-//  var loadingBarResizeX = game.world.width/387;
-//  loadingBar.scale.setTo(loadingBarResizeX,1);  
-//  var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
-//  statusText.anchor.setTo(0.5);
-//  game.load.setPreloadSprite(loadingBar);
-
-
-  game.load.text('leveldata', '../static/js/levels.json');
-
-  game.load.image('heart', '../static/assets/images/Heart.png');
-  game.load.image('button', '../static/assets/images/roundedColoredButton.png');
-  game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
-
-  game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
-  game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
-  game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
-  game.load.image('diamond', '../static/assets/images/diamond.png');
+  console.log('got to first preload');
 }
 
 var emitter;
@@ -293,8 +273,37 @@ var bootState = {
 },
 
   create: function() {
-    console.log("Bootstate");
-//    logAllThings();
+    game.stage.backgroundColor = '#000000';
+    game.state.start('load');
+  },
+
+  start: function() {
+    game.state.start('load');
+  }
+};
+
+var loadState = {
+  preload: function() {  
+    console.log("loading assets");
+
+    game.load.text('leveldata', '../static/js/levels.json');
+
+    game.load.image('heart', '../static/assets/images/Heart.png');
+    game.load.image('button', '../static/assets/images/roundedColoredButton.png');
+    game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
+
+    game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
+    game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
+    game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
+    game.load.image('diamond', '../static/assets/images/diamond.png');
+//   logAllThings();
+    var loadingBar = game.add.sprite(0, game.world.height - 50, 'preloader');
+    var loadingBarResizeX = game.world.width/387;
+    loadingBar.scale.setTo(loadingBarResizeX,1);  
+    var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
+    statusText.anchor.setTo(0.5);
+    game.load.setPreloadSprite(loadingBar);
+
     if (portrait){
       var logoWidth = 296;
       var logoHeight = 207;
@@ -308,30 +317,39 @@ var bootState = {
       var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
       gameLogo.anchor.set(0.5);
     } 
-   
-    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-    touchToStart.anchor.set(0.5);
-    
-    touchToStart.alpha = 1;
-    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
-    textTween.yoyo(true, 300);
-    
-    game.input.onTap.addOnce(this.start, this);
-    
   },
-
-
-  start: function() {
-    game.state.start('load');
+  loadUpdate: function() {
+    console.log('load update triggered');
+    var progressAmount = game.load.progress;
+    console.log(game.load.progress);
+    if (progressAmount === 100) {
+      this.loadComplete();
+    };
+  },
+  loadComplete: function() { 
+//    loadingBar.kill();
+//    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+//    touchToStart.anchor.set(0.5);
+    
+//    touchToStart.alpha = 1;
+//    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
+//    textTween.yoyo(true, 300);
+    
+//    game.input.onTap.addOnce(this.start, this);
+    
+//  },
+//  start: function() {
+    game.state.start('instructions');
+//  }
   }
 };
 
-var loadState = {
+var instructionState = {
   preload: function() {
     preload();
   },
   create: function() {
-    console.log('Loadstate');
+    console.log('instruction state');
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -667,6 +685,7 @@ var loseState = {
 
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
+game.state.add('instructions', instructionState);
 game.state.add('play', playState);
 game.state.add('levelUp', progressState);
 game.state.add('bonus', bonusState);
