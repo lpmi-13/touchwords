@@ -734,6 +734,10 @@ var winState = {
     game.stage.backgroundColor = 0x000000;
     var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth: width*.65});
     winText.anchor.set(0.5);
+
+    var finalScoreText = game.add.text(game.world.centerX, game.world.centerY + (game.world.height * .1), 'Final Score: ' + score, {font:'2.5em Georgia', fill:'#0095DD'});
+    finalScoreText.anchor.set(0.5);
+
     var continueText = game.add.text(game.world.centerX, game.world.height -50, "Touch the screen to play again...", {font:'1.5em Georgia', fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
