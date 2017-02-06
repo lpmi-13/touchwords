@@ -61,10 +61,8 @@ logAllThings();
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
-  //progressText = game.add.text(5,5, 'Total: 0/' + levelVars.progressTotal , {font: '1.8em Georgia', fill: '#0095DD'});
 
   scoreText = game.add.text(5, 5, 'Points: '+ score, {font: '2.8em Georgia', fill: '#0095DD'});
-//  scoreText.anchor.set(1,0);
 
   heartPool = game.add.group();
 
@@ -298,7 +296,6 @@ var loadState = {
     game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
     game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
     game.load.image('diamond', '../static/assets/images/diamond.png');
-//   logAllThings();
     var loadingBar = game.add.sprite(0, game.world.height - 50, 'preloader');
     var loadingBarResizeX = game.world.width/387;
     loadingBar.scale.setTo(loadingBarResizeX,1);  
@@ -427,10 +424,10 @@ var bonusState = {
       minutes = Math.floor(timeRemaining / 60);
       seconds = Math.floor(timeRemaining) - (60 * minutes);
 
-      console.log('time remaining is: ' + timeRemaining);
+//      console.log('time remaining is: ' + timeRemaining);
 
       if (Math.floor(timeRemaining) == 0) {
-	console.log('no time remaining');
+//	console.log('no time remaining');
         timeExpired();
       }
 
@@ -465,7 +462,9 @@ var bonusState = {
       wordToCorrect.setText('');
       promptText.setText('');
 
-      var lossText = game.add.text(this.game.world.centerX, this.game.world.centerY, 'TIME\'S UP', {font: '12em Arial', fill: '#ff0000'});
+      var timesUpFont = portrait ? '4.5em Arial' : '12em Arial';
+
+      var lossText = game.add.text(this.game.world.centerX, this.game.world.centerY, 'TIME\'S UP', {font: timesUpFont , fill: '#ff0000'});
       lossText.anchor.setTo(0.5);
       game.time.events.add(Phaser.Timer.SECOND * 3, startBonusLossFade, this );
       }
