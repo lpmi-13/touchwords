@@ -29,6 +29,7 @@ var bonusEmitter;
 var displaySpelling;
 var wordToCorrect;
 var promptText;
+var inputRectangle;
 var level = 0;
 var scoreText;
 var score = 0;
@@ -291,7 +292,7 @@ var loadState = {
     game.load.image('heart', '../static/assets/images/Heart.png');
     game.load.image('button', '../static/assets/images/roundedColoredButton.png');
     game.load.image('deleteButton', '../static/assets/images/deleteButton.png');
-
+    game.load.bitmapFont('digitalFont', '../static/assets/fonts/font.png', '../static/assets/fonts/font.fnt');
     game.load.image('level1Background', '../static/assets/images/voodoo_cactus_island_scaled.png');
     game.load.image('level2Background', '../static/assets/images/fishbgexp_scaled.jpg');
     game.load.image('level3Background', '../static/assets/images/cloudsinthedesert_scaled.png');
@@ -435,8 +436,9 @@ var bonusState = {
 
       result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
 
-      timeLabel.text = result;
+      console.log(result);
 
+      timeLabel.text = result;
    }
 
     function startBonusLossFade() {
@@ -451,8 +453,10 @@ var bonusState = {
 
     function timeExpired() {
       timeLabel.destroy();
-      var timeExpired = game.add.text(this.game.world.width - 5, 0, '00:00', {font: '4em Arial', fill: '#ff0000'});
+      var timeExpiredFont = portrait ? 32 : 64;
+      var timeExpired = game.add.bitmapText(game.world.width - 5, 5, 'digitalFont', '00:00', timeExpiredFont);
       timeExpired.anchor.set(1, 0);
+      timeExpired.fill = '#ffffff';
 //      startBonusLossFade();
       
       buttonPool.callAll('kill');
@@ -462,10 +466,11 @@ var bonusState = {
       wordToCorrect.setText('');
       promptText.setText('');
 
-      var timesUpFont = portrait ? '4.5em Arial' : '12em Arial';
+      inputRectangle.destroy();
 
-      var lossText = game.add.text(this.game.world.centerX, this.game.world.centerY, 'TIME\'S UP', {font: timesUpFont , fill: '#ff0000'});
-      lossText.anchor.setTo(0.5);
+      var timesUpFont = portrait ? '3em Arial' : '12em Arial';
+
+      var lossText = game.add.text(this.game.world.centerX, this.game.world.centerY, 'TIME\'S UP', {font: timesUpFont , fill: '#ff0000'}); lossText.anchor.setTo(0.5);
       game.time.events.add(Phaser.Timer.SECOND * 3, startBonusLossFade, this );
       }
     var gameTimer = game.time.events.loop(100, updateTimer, this);
@@ -527,8 +532,8 @@ var bonusState = {
       var shuffledWord = shuffle(mixedArray);
 
     if (portrait) {
-      promptText = game.add.text(game.world.centerX, game.world.height * .3, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
-      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .4, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
     } else {
       promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
       wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
@@ -568,12 +573,23 @@ var bonusState = {
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
-var spellText = "";
+  var rectangleWidth = game.world.width * .65;
+  var rectangleHeight = game.world.height * .15;
+  var bmd = game.add.bitmapData(rectangleWidth, rectangleHeight);
+
+  bmd.ctx.beginPath();
+  bmd.ctx.rect(0,0, rectangleWidth, rectangleHeight);
+  bmd.ctx.fillStyle = '#ffffff';
+  bmd.ctx.fill();
+  inputRectangle = game.add.sprite(game.world.centerX, game.world.centerY, bmd);
+  inputRectangle.anchor.setTo(0.5,0.5);
+
+  var spellText = "";
 
   if (portrait) {
-    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"4em Georgia", fill: '#AA6339', align: 'center'});
+    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"4em Georgia", fill: '#000000', align: 'center'});
   } else {
-    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#AA6339', align: 'center'});
+    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#000000', align: 'center'});
   }
 
     displaySpelling.anchor.set(0.5);
@@ -619,32 +635,34 @@ var spellText = "";
       if (oldBonusText) {
         var increaseBonusScoreText = oldBonusText.reset(sprite.x,sprite.y);
       } else {
-        var increaseBonusScoreText = game.add.text(displaySpelling.x, displaySpelling.y, '+50', {font: '3em Georgia', fill: '#000000'}, bonusScorePool);
+        var increaseBonusScoreText = game.add.text(displaySpelling.x, displaySpelling.y, '+50', {font: '3.5em Georgia', fill: '#000000'}, bonusScorePool);
     }
+      increaseBonusScoreText.anchor.setTo(0.5);
+      increaseBonusScoreText.fontWeight = 'bold';
       increaseBonusScoreText.body.velocity.setTo(0,-200);
       return increaseBonusScoreText;
     }
 
     function stopClockCountPoints() {
         game.time.events.add(Phaser.Timer.SECOND * 3, startBonusWinFade, this );
-        bonusEmitter = game.add.emitter(timeLabel.x, timeLabel.y, 100);
+        bonusEmitter = game.add.emitter(game.world.width - 5, 5, 2000);
         bonusEmitter.makeParticles('diamond');
         bonusEmitter.minRotation = 0;
         bonusEmitter.maxRotation = 0;
         bonusEmitter.gravity = 0;
-        bonusEmitter.start(false, 1000, 15);
+        bonusEmitter.start(false, 2500, 10);
 	var totalSeconds = (minutes * 60) + seconds;
 	var totalPointsToAdd = totalSeconds * 10;
 	score += totalPointsToAdd;
  	bonusScoreText.setText('Points: ' + score);
-	timeLabel.addColor('#2B4970', 0);
+//	timeLabel.addColor('#2B4970', 0);
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
 
     function stopClockCountPointsFinal() {
 	game.time.events.add(Phaser.Timer.SECOND * 3, startFinalWinFade, this);
-        var bonusEmitter = game.add.emitter(timeLabel.x, timeLabel.y, 100);
+        var bonusEmitter = game.add.emitter(game.world.width - 5, 5, 2000);
         bonusEmitter.makeParticles('diamond');
         bonusEmitter.minRotation = 0;
         bonusEmitter.maxRotation = 0;
@@ -654,7 +672,7 @@ var spellText = "";
 	var totalPointsToAdd = totalSeconds + 10;
 	score += totalPointsToAdd;
 	bonusScoreText.setText('Points: ' + score);
-        timeLabel.addColor('#2B4970');
+//        timeLabel.addColor('#2B4970');
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
@@ -703,7 +721,8 @@ var spellText = "";
 //    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
-    timeLabel = game.add.text(this.game.world.width - 5, 0, '00:00', {font: '4em Arial', fill: '#fff'});
+    var timeLabelFont = portrait ? 32 : 64;
+    timeLabel = game.add.bitmapText(game.world.width - 5, 5, 'digitalFont', '00:00', timeLabelFont);
     timeLabel.anchor.setTo(1,0);
     timeLabel.align = 'center';
   },

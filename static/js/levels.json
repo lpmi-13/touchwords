@@ -29,7 +29,7 @@
 	  "background": "level3Background",
 	  "backgroundWidth": 1024,
 	  "backgroundHeight": 717,
-	  "progressTotal": 30,
+	  "progressTotal": 3,
 	  "bonusTime": 120,
 	  "velocityXlower": -300,
 	  "velocityXhigher": 300,
