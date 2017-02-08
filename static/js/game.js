@@ -573,7 +573,7 @@ var bonusState = {
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
-  var rectangleWidth = game.world.width * .65;
+  var rectangleWidth = portrait ? game.world.width * .85 : game.world.width * .65;
   var rectangleHeight = game.world.height * .15;
   var bmd = game.add.bitmapData(rectangleWidth, rectangleHeight);
 
