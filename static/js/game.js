@@ -498,7 +498,7 @@ var bonusState = {
       var elementHeight = (game.world.height/6);
     
     if (portrait) {
-      var buttonScaleX = (elementWidth * .75)/53;
+      var buttonScaleX = (elementWidth * .8)/53;
       var buttonScaleY = (elementHeight * .65)/40;
     } else {
       var buttonScaleX = (elementWidth * .85)/53;
@@ -602,6 +602,9 @@ var bonusState = {
     console.log('the level is: ' + level);
 
     function spellCheck(sprite,pointer) {
+      if (spellText.length > 9 ) {
+        return false;
+      }      
       spellText += sprite.data.letter;
       displaySpelling.setText(spellText);
       if (spellText == answer) {
@@ -614,12 +617,14 @@ var bonusState = {
           displaySpelling.setText('');
           wordToCorrect.setText('');
           promptText.setText('');
+	  buttonPool.setAll('inputEnabled', false);
 	  stopClockCountPointsFinal();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
           displaySpelling.setText('');
           wordToCorrect.setText('');
           promptText.setText('');
+	  buttonPool.setAll('inputEnabled', false);
 	  stopClockCountPoints();
         }  else {
           clearScreen();
