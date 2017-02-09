@@ -1,17 +1,7 @@
-
 var width = screen.width;
 var height = screen.height;
 
 var portrait = checkOrientation(width, height)
-
-function logAllThings() {
-  console.log('the screen width is ' + screen.width);
-  console.log('the screen height is ' + screen.height);
-  console.log('the game world width is ' + game.world.width);
-  console.log('the game world height is ' + game.world.height);
-}
-
-
 
 function checkOrientation(width, height) {
   return height > width; 
@@ -21,7 +11,6 @@ function checkOrientation(width, height) {
   var game = new Phaser.Game(width * .8, height * heightMultiplier, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
 function preload() {
-  console.log('got to first preload');
 }
 
 var emitter;
@@ -33,7 +22,6 @@ var inputRectangle;
 var level = 0;
 var scoreText;
 var score = 0;
-//var progressText;
 var progress = 0;
 var timeLabel;
 var livesPool;
@@ -50,7 +38,6 @@ function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
   var levelVars = game.levelData.levelVariables[level];
 
-console.log('level vars are: ' + levelVars);
 
 var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
 
@@ -112,9 +99,6 @@ background.tileScale.y = resizeY;
   var words = Object.keys(levelVars.verbs);
   var length = words.length;
 
-  console.log(wordInfo);
-  console.log(words);
-
   function createRandom() {
     return game.rnd.integerInRange(0, length - 1);
   }
@@ -129,10 +113,6 @@ background.tileScale.y = resizeY;
         })();
 
 	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
-
-	console.log('random number is ' + randomNumber);
-	console.log('word = ' + words[randomNumber]);
-	console.log('wordsArray is ' + wordsArray);
 
 	wordsArray.push(randomNumber);
         if (wordsArray.length > 10) {
@@ -172,7 +152,6 @@ background.tileScale.y = resizeY;
   	  score += 10;
 	  scoreText.setText('Points: ' + score);
 	  progress += 1; 
-          //progressText.setText('Total: ' + progress + '/' + levelVars.progressTotal);
 	  if (progress == levelVars.progressTotal) {
 	      levelUpTransition();
 	  }
@@ -229,15 +208,7 @@ background.tileScale.y = resizeY;
 
     emitter.start(true, 1000, null, 5);
 
-    //game.time.events.add(2000, destroyEmitter, this);
   }
-
-
-//this function breaks everything, so not calling it
-//  function destroyEmitter() {
-//    emitter.destroy();
-//  }
-
 
   function loseLife() {
       heartCount--;
@@ -290,7 +261,6 @@ var bootState = {
 
 var loadState = {
   preload: function() {  
-    console.log("loading assets");
 
     game.load.text('leveldata', '../static/js/levels.json');
 
@@ -324,28 +294,13 @@ var loadState = {
     } 
   },
   loadUpdate: function() {
-    console.log('load update triggered');
     var progressAmount = game.load.progress;
-    console.log(game.load.progress);
     if (progressAmount === 100) {
       this.loadComplete();
     };
   },
   loadComplete: function() { 
-//    loadingBar.kill();
-//    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-//    touchToStart.anchor.set(0.5);
-    
-//    touchToStart.alpha = 1;
-//    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
-//    textTween.yoyo(true, 300);
-    
-//    game.input.onTap.addOnce(this.start, this);
-    
-//  },
-//  start: function() {
     game.state.start('instructions');
-//  }
   }
 };
 
@@ -354,7 +309,6 @@ var instructionState = {
     preload();
   },
   create: function() {
-    console.log('instruction state');
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -385,8 +339,6 @@ var instructionState = {
 
 var playState = {
   create: function() {
-    console.log('Playstate');
-   // score = 0;
     progress = 0;   
  create();
   },
@@ -397,8 +349,6 @@ var playState = {
 
 var bonusState = {
   create: function() {
-    console.log('bonus round!');
-    console.log(clickedArray);
     game.stage.backgroundColor = '#2B4970';
     var bonusCount = 0;
     var minutes;
@@ -409,7 +359,6 @@ var bonusState = {
 
     var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: '3em Georgia', fill: '#ffffff'});
     bonusScoreText.setText('Points: ' + score);
-//    bonusScoreText.anchor.set(1,1);
 
     game.levelData = JSON.parse(game.cache.getText('leveldata')); 
     var levelVars = game.levelData.levelVariables[level];
@@ -430,18 +379,13 @@ var bonusState = {
       minutes = Math.floor(timeRemaining / 60);
       seconds = Math.floor(timeRemaining) - (60 * minutes);
 
-//      console.log('time remaining is: ' + timeRemaining);
-
       if (Math.floor(timeRemaining) == 0) {
-//	console.log('no time remaining');
         timeExpired();
       }
 
       var result = (minutes < 10) ? '0' + minutes : minutes;
 
       result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
-
-      console.log(result);
 
       timeLabel.text = result;
    }
@@ -462,8 +406,6 @@ var bonusState = {
       var timeExpired = game.add.bitmapText(game.world.width - 5, 5, 'digitalFont', '00:00', timeExpiredFont);
       timeExpired.anchor.set(1, 0);
       timeExpired.fill = '#ffffff';
-//      startBonusLossFade();
-      
       buttonPool.callAll('kill');
       letterPool.callAll('kill');
       deleteButton.destroy();
@@ -506,14 +448,10 @@ var bonusState = {
     }
 
     function renderBonusItem() {
-      console.log('the current count is: ' + bonusCount);
-      console.log(clickedArray.length);
       var displayItem = clickedArray[bonusCount].text;
       var displayArray = displayItem.split('');
       var answer = clickedArray[bonusCount].answer;
       var wordItem = clickedArray[bonusCount].answer.split('');
-      console.log(wordItem);
-
       var uniqueArray = displayArray.filter(function(obj) {
         return wordItem.indexOf(obj) == -1;
       });
@@ -599,8 +537,6 @@ var bonusState = {
 
     displaySpelling.anchor.set(0.5);
 
-    console.log('the level is: ' + level);
-
     function spellCheck(sprite,pointer) {
       if (spellText.length > 9 ) {
         return false;
@@ -608,7 +544,6 @@ var bonusState = {
       spellText += sprite.data.letter;
       displaySpelling.setText(spellText);
       if (spellText == answer) {
-        console.log('you got it!');
         addBonusScore();
         score += 50;
  	bonusScoreText.setText('Points: ' + score);
@@ -665,7 +600,6 @@ var bonusState = {
 	var totalPointsToAdd = totalSeconds * 10;
 	score += totalPointsToAdd;
  	bonusScoreText.setText('Points: ' + score);
-//	timeLabel.addColor('#2B4970', 0);
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
@@ -682,7 +616,6 @@ var bonusState = {
 	var totalPointsToAdd = totalSeconds + 10;
 	score += totalPointsToAdd;
 	bonusScoreText.setText('Points: ' + score);
-//        timeLabel.addColor('#2B4970');
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
@@ -697,9 +630,7 @@ var bonusState = {
     }
 
     function clearScreen() {
-      console.log('killing all buttons');
       buttonPool.callAll('kill');
-      console.log('killing all letters');
       letterPool.callAll('kill');
       displaySpelling.setText('');
       wordToCorrect.setText('');
@@ -728,7 +659,6 @@ var bonusState = {
   }
 
   renderBonusItem();
-//    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
     var timeLabelFont = portrait ? 32 : 64;
@@ -746,7 +676,6 @@ var bonusState = {
 var progressState = {
   create: function() {
     level++;
-    console.log('LevelUp!!');
     game.stage.backgroundColor = 0x000000;
     var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
@@ -759,7 +688,6 @@ var progressState = {
 
 var winState = {
   create: function() {
-    console.log('winState');
     game.stage.backgroundColor = 0x000000;
     var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth: width*.65});
     winText.anchor.set(0.5);
@@ -781,7 +709,6 @@ var winState = {
 
 var loseState = {
   create: function() {
-    console.log('loseState');
     game.stage.backgroundColor = 0x000000;
     var instructionsText = game.add.text(game.world.centerX, game.world.centerY, "GAME OVER", {font:'2.5em Georgia',fill:'#0095DD'});
     instructionsText.anchor.set(0.5);
