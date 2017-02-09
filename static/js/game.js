@@ -107,8 +107,13 @@ background.tileScale.y = resizeY;
 
   var wordsArray = [];
 
-  var words = Object.keys(verbs);
+  var wordInfo = levelVars.verbs;
+
+  var words = Object.keys(levelVars.verbs);
   var length = words.length;
+
+  console.log(wordInfo);
+  console.log(words);
 
   function createRandom() {
     return game.rnd.integerInRange(0, length - 1);
@@ -138,8 +143,8 @@ background.tileScale.y = resizeY;
 	word.strokeThickness = 3;
 	word.setShadow(2,2, "#333333", 2, true, false);
 	word.data = {
-		regular : verbs[words[randomNumber]].regular,
-		answer : verbs[words[randomNumber]].correction
+		regular : wordInfo[words[randomNumber]].regular,
+		answer : wordInfo[words[randomNumber]].correction
 	}
 	word.inputEnabled = true;
 	word.events.onInputDown.add(test, this);
