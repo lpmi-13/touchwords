@@ -272,7 +272,6 @@ function update() {
 var bootState = {
   
   preload: function() {
-    game.load.image('logo','../static/assets/images/logo.png');
     game.load.image('preloader', '../static/assets/images/loading.png');
 
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -289,9 +288,10 @@ var bootState = {
 };
 
 var loadState = {
-  preload: function() {  
+  preload: function() {
     console.log("loading assets");
 
+    game.load.image('logo','../static/assets/images/logo.png');
     game.load.text('leveldata', '../static/js/levels.json');
 
     game.load.image('heart', '../static/assets/images/Heart.png');
@@ -304,10 +304,41 @@ var loadState = {
     game.load.image('diamond', '../static/assets/images/diamond.png');
     var loadingBar = game.add.sprite(0, game.world.height - 50, 'preloader');
     var loadingBarResizeX = game.world.width/387;
-    loadingBar.scale.setTo(loadingBarResizeX,1);  
+    loadingBar.scale.setTo(loadingBarResizeX,1);
     var statusText = game.add.text(game.world.centerX, game.world.height - 130, 'Loading...', {fill: 'white'});
     statusText.anchor.setTo(0.5);
     game.load.setPreloadSprite(loadingBar);
+
+  },
+  loadUpdate: function() {
+    console.log('load update triggered');
+    var progressAmount = game.load.progress;
+    console.log(game.load.progress);
+    if (progressAmount === 100) {
+      this.loadComplete();
+    };
+  },
+  loadComplete: function() { 
+      game.state.start('splashScreen');
+//  }
+  }
+};
+
+var splashScreenState = {
+  preload: function() {
+    preload();
+  },
+  create: function() {
+    console.log('splash screen state');
+
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
+
+    game.scale.refresh();
+
 
     if (portrait){
       var logoWidth = 296;
@@ -321,33 +352,23 @@ var loadState = {
     } else {
       var gameLogo = game.add.sprite(game.world.centerX,game.world.centerY/2,'logo');
       gameLogo.anchor.set(0.5);
-    } 
+    }
+
+    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    touchToStart.anchor.set(0.5);
+
+    touchToStart.alpha = 1;
+    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
+    textTween.yoyo(true, 300);
+
+    game.input.onTap.addOnce(this.start, this);
+
   },
-  loadUpdate: function() {
-    console.log('load update triggered');
-    var progressAmount = game.load.progress;
-    console.log(game.load.progress);
-    if (progressAmount === 100) {
-      this.loadComplete();
-    };
-  },
-  loadComplete: function() { 
-//    loadingBar.kill();
-//    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
-//    touchToStart.anchor.set(0.5);
-    
-//    touchToStart.alpha = 1;
-//    var textTween = game.add.tween(touchToStart).to( { alpha: .25 }, 300, "Linear", true, 1, -1);
-//    textTween.yoyo(true, 300);
-    
-//    game.input.onTap.addOnce(this.start, this);
-    
-//  },
-//  start: function() {
+  start: function() {
     game.state.start('instructions');
-//  }
   }
 };
+
 
 var instructionState = {
   preload: function() {
@@ -798,6 +819,7 @@ var loseState = {
 
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
+game.state.add('splashScreen', splashScreenState);
 game.state.add('instructions', instructionState);
 game.state.add('play', playState);
 game.state.add('levelUp', progressState);
