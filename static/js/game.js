@@ -377,7 +377,7 @@ var instructionState = {
     var continueFontSize = portrait ? '1.5em Georgia' : '3.2em Georgia';
     var continueOffsetY = portrait ? 25 : 50;
 
-    var continueText = game.add.text(game.world.centerX, game.world.height - continueOffsetY, "touch the screen to continue...", {font: contineFontSize, fill: '#0095DD'});
+    var continueText = game.add.text(game.world.centerX, game.world.height - continueOffsetY, "touch the screen to continue...", {font: continueFontSize, fill: '#0095DD'});
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);  
   },
