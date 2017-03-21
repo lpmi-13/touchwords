@@ -564,7 +564,7 @@ var bonusState = {
     deleteButton.inputEnabled = true;
     deleteButton.anchor.set(0.5);
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
-    deleteButton.events.onInputDown.add(deleteLetter,this);
+    deleteButton.events.onInputDown.add(clearAllLetters,this);
 
     clearLeftButton = game.add.sprite(game.world.width - screenGutterWidth, (game.world.height * .9) - elementHeight, 'clearLeftButton');
     clearLeftButton.inputEnabled = true;
@@ -683,6 +683,10 @@ var bonusState = {
     function deleteLetter(sprite,pointer){
       spellText = spellText.substring(0, spellText.length - 1);
       displaySpelling.setText(spellText);
+    }
+
+    function clearAllLetters(sprite,pointer) {
+      displaySpelling.setText('');
     }
 
     function destroyTimer() {
