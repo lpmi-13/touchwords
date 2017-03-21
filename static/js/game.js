@@ -320,7 +320,6 @@ var loadState = {
   },
   loadComplete: function() { 
       game.state.start('splashScreen');
-//  }
   }
 };
 
@@ -387,17 +386,14 @@ var instructionState = {
 
     var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
-    if (portrait){
-      var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    } else { 
-      var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    }
+    var fontSize = portrait ? "1.5 em Georgia" : "3.5em Georgia";
+    var offsetY = portrait ? 25 : 50;
+
+    var continueText = game.add.text(game.world.centerX, game.world.height - offsetY, "touch the screen to continue...", {font: fontSize, fill: '#0095DD'});
+    continueText.anchor.set(0.5);
+    game.input.onTap.addOnce(this.start, this);
   },
-  
+
   start: function() {
     game.state.start('play');
   }
@@ -407,8 +403,7 @@ var instructionState = {
 var playState = {
   create: function() {
     console.log('Playstate');
-   // score = 0;
-    progress = 0;   
+    progress = 0;
  create();
   },
   update: function() {
@@ -430,9 +425,8 @@ var bonusState = {
 
     var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: '3em Georgia', fill: '#ffffff'});
     bonusScoreText.setText('Points: ' + score);
-//    bonusScoreText.anchor.set(1,1);
 
-    game.levelData = JSON.parse(game.cache.getText('leveldata')); 
+    game.levelData = JSON.parse(game.cache.getText('leveldata'));
     var levelVars = game.levelData.levelVariables[level];
     this.startTime = new Date();
     this.totalTime = levelVars.bonusTime;
@@ -451,10 +445,7 @@ var bonusState = {
       minutes = Math.floor(timeRemaining / 60);
       seconds = Math.floor(timeRemaining) - (60 * minutes);
 
-//      console.log('time remaining is: ' + timeRemaining);
-
       if (Math.floor(timeRemaining) == 0) {
-//	console.log('no time remaining');
         timeExpired();
       }
 
@@ -483,10 +474,9 @@ var bonusState = {
       var timeExpired = game.add.bitmapText(game.world.width - 5, 5, 'digitalFont', '00:00', timeExpiredFont);
       timeExpired.anchor.set(1, 0);
       timeExpired.fill = '#ffffff';
-//      startBonusLossFade();
-      
       buttonPool.callAll('kill');
       letterPool.callAll('kill');
+      console.log('kill delete sprite');
       deleteButton.destroy();
       displaySpelling.setText('');
       wordToCorrect.setText('');
@@ -506,25 +496,20 @@ var bonusState = {
     var letterPool = game.add.group();
     var numberOfRowElements = 6;
 
-    if (portrait) {
-      var style = {font: '3.8em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .075;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
-    } else {
-      var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .2;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
-    }
+    var fontSize = portrait ? '3.8em Arial' : '8.5em Arial';
+    var gutterMultiplier = portrait ? .075 : .2;
 
-      var elementHeight = (game.world.height/6);
-    
-    if (portrait) {
-      var buttonScaleX = (elementWidth * .8)/53;
-      var buttonScaleY = (elementHeight * .65)/40;
-    } else {
-      var buttonScaleX = (elementWidth * .85)/53;
-      var buttonScaleY = (elementHeight * .85)/40;
-    }
+    var style = {font: fontSize, fill: '#000000', align: 'center'};
+    var screenGutterWidth = gameWidth * gutterMultiplier;
+    var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
+
+    var elementHeight = (game.world.height/6);
+
+    var elementXWidth = portrait ? .8 : .85;
+    var elementYWidth = portrait ? .65 : .85;
+
+    var buttonScaleX = (elementWidth * elementXWidth)/53;
+    var buttonScaleY = (elementHeight * elementYWidth)/40;
 
     function renderBonusItem() {
       console.log('the current count is: ' + bonusCount);
@@ -555,42 +540,40 @@ var bonusState = {
 	}
       }
 
-      var shuffledWord = shuffle(mixedArray);
+    var shuffledWord = shuffle(mixedArray);
 
-    if (portrait) {
-      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
-      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
-    } else {
-      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
-      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
+    var promptFontSize = portrait ? '3em Georgia' : '5em Georgia';
+    var correctFontSize = portrait ? '3.25em Georgia' : '6em Georgia';
+
+    promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
+    wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
+
+    promptText.anchor.set(0.5);
+    promptText.stroke = 'AA9239';
+    promptText.strokeThickness = 3;
+
+    wordToCorrect.anchor.set(0.5);
+    wordToCorrect.stroke = 'AA9239';
+    wordToCorrect.strokeThickness = 3;
+
+    for (var j = 0; j < shuffledWord.length; j++) {
+      var row = Math.floor(j / numberOfRowElements);
+      var column = Math.floor(j % numberOfRowElements);
+
+      var xPos = (column * elementWidth) + screenGutterWidth;
+      var yPos = (game.world.height * .9 ) - (row * elementHeight);
+      var button = game.add.sprite(xPos, yPos, 'button');
+      button.anchor.set(0.5);
+      button.inputEnabled = true;
+      button.data.letter = shuffledWord[j];
+      button.events.onInputDown.add(spellCheck, this);
+      button.scale.set(buttonScaleX,buttonScaleY);
+      buttonPool.add(button);
+
+      var letterSprite = game.add.text(xPos, yPos, shuffledWord[j], style);
+      letterSprite.anchor.set(0.5);
+      letterPool.add(letterSprite);
     }
-
-      promptText.anchor.set(0.5);
-      promptText.stroke = 'AA9239';
-      promptText.strokeThickness = 3;
-
-      wordToCorrect.anchor.set(0.5);
-      wordToCorrect.stroke = 'AA9239';
-      wordToCorrect.strokeThickness = 3;
-
-      for (var j = 0; j < shuffledWord.length; j++) {
-        var row = Math.floor(j / numberOfRowElements);
-        var column = Math.floor(j % numberOfRowElements);
-
-        var xPos = (column * elementWidth) + screenGutterWidth;
-        var yPos = (game.world.height * .9 ) - (row * elementHeight);
-        var button = game.add.sprite(xPos, yPos, 'button');
-        button.anchor.set(0.5);
-        button.inputEnabled = true;
-        button.data.letter = shuffledWord[j];
-        button.events.onInputDown.add(spellCheck, this);
-        button.scale.set(buttonScaleX,buttonScaleY);
-        buttonPool.add(button);
-
-        var letterSprite = game.add.text(xPos, yPos, shuffledWord[j], style);
-        letterSprite.anchor.set(0.5);
-        letterPool.add(letterSprite);
-      }
 
 
     deleteButton = game.add.sprite(game.world.width - screenGutterWidth, game.world.height * .9, 'deleteButton');
