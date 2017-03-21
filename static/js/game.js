@@ -686,7 +686,8 @@ var bonusState = {
     }
 
     function clearAllLetters(sprite,pointer) {
-      displaySpelling.setText('');
+      spellText = '';
+      displaySpelling.setText(spellText);
     }
 
     function destroyTimer() {
