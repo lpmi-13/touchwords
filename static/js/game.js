@@ -4,15 +4,6 @@ var height = screen.height;
 
 var portrait = checkOrientation(width, height)
 
-function logAllThings() {
-  console.log('the screen width is ' + screen.width);
-  console.log('the screen height is ' + screen.height);
-  console.log('the game world width is ' + game.world.width);
-  console.log('the game world height is ' + game.world.height);
-}
-
-
-
 function checkOrientation(width, height) {
   return height > width; 
 }
@@ -50,17 +41,13 @@ function create() {
   game.levelData = JSON.parse(game.cache.getText('leveldata')); 
   var levelVars = game.levelData.levelVariables[level];
 
-console.log('level vars are: ' + levelVars);
+  var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
 
-var background = game.add.tileSprite(0, 0, levelVars.backgroundWidth, levelVars.backgroundHeight, levelVars.background);
+  var resizeX = game.world.width/levelVars.backgroundWidth;
+  var resizeY = game.world.height/levelVars.backgroundHeight;
 
-var resizeX = game.world.width/levelVars.backgroundWidth;
-var resizeY = game.world.height/levelVars.backgroundHeight;
-
-logAllThings();
-
-background.tileScale.x = resizeX;
-background.tileScale.y = resizeY;
+  background.tileScale.x = resizeX;
+  background.tileScale.y = resizeY;
 
   var scoreFontSize = portrait ? '2.8em Georgia' : '3.5em Georgia';
 
@@ -89,7 +76,8 @@ background.tileScale.y = resizeY;
     if (oldText) {
       var increaseScoreText = oldText.reset(sprite.x,sprite.y);
     } else {
-      var increaseScoreText = game.add.text(sprite.x, sprite.y, '+10', {font: '3em Georgia', fill: '#0095DD'}, scorePool);
+      var increaseScoreTextFont = portrait ? '3em Georgia' : '4.5em Georgia';
+      var increaseScoreText = game.add.text(sprite.x, sprite.y, '+10', {font: increaseScoreTextFont, fill: '#0095DD'}, scorePool);
     }
     increaseScoreText.body.velocity.setTo(0,-200);
     return increaseScoreText;
@@ -387,7 +375,7 @@ var instructionState = {
     var instructionsText = game.add.text(15,35, instructions, {font: instructionFontSize, fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
 
     var continueFontSize = portrait ? '1.5em Georgia' : '3.2em Georgia';
-    var continueOffsetY = portait ? 25 : 50;
+    var continueOffsetY = portrait ? 25 : 50;
 
     var continueText = game.add.text(game.world.centerX, game.world.height - continueOffsetY, "touch the screen to continue...", {font: contineFontSize, fill: '#0095DD'});
     continueText.anchor.set(0.5);
@@ -423,7 +411,8 @@ var bonusState = {
     var gameWidth = game.world.width;
     var gameHeight = game.world.height;
 
-    var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: '3em Georgia', fill: '#ffffff'});
+    var bonusScoreTextFont = portrait ? '3em Georgia' : '4.5em Georgia';
+    var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: bonusScoreTextFont, fill: '#ffffff'});
     bonusScoreText.setText('Points: ' + score);
 
     game.levelData = JSON.parse(game.cache.getText('leveldata')); 
@@ -493,41 +482,31 @@ var bonusState = {
     var letterPool = game.add.group();
     var numberOfRowElements = 6;
 
-    
+    var elementFontSize = portrait ? '3.8em Arial' : '8.5em Arial';
+    var elementGutterWidth = portrait ? .075 : .2;
 
-    if (portrait) {
-      var style = {font: '3.8em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .075;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
-    } else {
-      var style = {font: '8.5em Arial', fill: '#000000', align: 'center'};
-      var screenGutterWidth = gameWidth * .2;
-      var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
-    }
+    var style = {font: elementFontSize, fill: '#000000', align: 'center'};
+    var screenGutterWidth = gameWidth * elementGutterWidth;
+    var elementWidth = (gameWidth - (screenGutterWidth*2))/numberOfRowElements;
 
-      var elementHeight = (game.world.height/6);
-    
-    if (portrait) {
-      var buttonScaleX = (elementWidth * .8)/53;
-      var buttonScaleY = (elementHeight * .65)/40;
-    } else {
-      var buttonScaleX = (elementWidth * .85)/53;
-      var buttonScaleY = (elementHeight * .85)/40;
-    }
+    var elementHeight = (game.world.height/6);
+    var elementWidthMultiplier = portrait ? .8 : .85;
+    var elementHeightMultiplier = portrait ? .65 : .85;
+
+    var buttonScaleX = (elementWidth * elementWidthMultiplier)/53;
+    var buttonScaleY = (elementHeight * elementHeightMultiplier)/40;
 
     function renderBonusItem() {
       var displayItem = clickedArray[bonusCount].text;
       var displayArray = displayItem.split('');
       var answer = clickedArray[bonusCount].answer;
       var wordItem = clickedArray[bonusCount].answer.split('');
-      console.log(wordItem);
 
       var uniqueArray = displayArray.filter(function(obj) {
         return wordItem.indexOf(obj) == -1;
       });
 
       var numberOfTotalLetters = numberOfRowElements * 2;
-
 
       var mixedArray = unique(wordItem.concat(uniqueArray));
       var numberOfExistingLetters = mixedArray.length;
@@ -544,9 +523,10 @@ var bonusState = {
 
       var shuffledWord = shuffle(mixedArray);
 
-    var promptFontSize = portrait ? '3em Georgia' : '5em Georgia';    var correctionFontsize = portrait ? '3.25em Georgia' : '6em Georgia';
+      var promptFontSize = portrait ? '3em Georgia' : '5em Georgia';
+      var correctionFontsize = portrait ? '3.25em Georgia' : '6em Georgia';
 
-    promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: promptFontSize, fill: '#dc9a41'});
+      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: promptFontSize, fill: '#dc9a41'});
     wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: correctionFontSize, fill :'#dc9a41'});
 
       promptText.anchor.set(0.5);
@@ -610,7 +590,6 @@ var bonusState = {
       spellText += sprite.data.letter;
       displaySpelling.setText(spellText);
       if (spellText == answer) {
-        console.log('you got it!');
         addBonusScore();
         score += 50;
  	bonusScoreText.setText('Points: ' + score);
@@ -620,6 +599,7 @@ var bonusState = {
           wordToCorrect.setText('');
           promptText.setText('');
 	  buttonPool.setAll('inputEnabled', false);
+	  deleteButton.inputEnabled = false;
 	  stopClockCountPointsFinal();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
@@ -627,6 +607,7 @@ var bonusState = {
           wordToCorrect.setText('');
           promptText.setText('');
 	  buttonPool.setAll('inputEnabled', false);
+	  deleteButton.inputEnabled = false;
 	  stopClockCountPoints();
         } else {
           clearScreen();
@@ -647,7 +628,8 @@ var bonusState = {
       if (oldBonusText) {
         var increaseBonusScoreText = oldBonusText.reset(sprite.x,sprite.y);
       } else {
-        var increaseBonusScoreText = game.add.text(displaySpelling.x, displaySpelling.y, '+50', {font: '3.5em Georgia', fill: '#000000'}, bonusScorePool);
+        var increaseBonusScoreTextFont = portrait ? '3.5em Georgia' : '5em Georgia';
+        var increaseBonusScoreText = game.add.text(displaySpelling.x, displaySpelling.y, '+50', {font: increaseBonusScoreTextFont, fill: '#000000'}, bonusScorePool);
     }
       increaseBonusScoreText.anchor.setTo(0.5);
       increaseBonusScoreText.fontWeight = 'bold';
@@ -762,13 +744,17 @@ var winState = {
   create: function() {
     console.log('winState');
     game.stage.backgroundColor = 0x000000;
-    var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font:'2.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth: width*.65});
+
+    var winTextFont = portrait ? '2.5em Georgia' : '4em Georgia';
+    var winText = game.add.text(game.world.centerX,game.world.centerY, "THAT'S ALL, YOU WIN!!!", {font: winTextFont, fill:'#0095DD', wordWrap: true, wordWrapWidth: width*.65});
     winText.anchor.set(0.5);
 
-    var finalScoreText = game.add.text(game.world.centerX, game.world.centerY + (game.world.height * .25), 'Final Score: ' + score, {font:'2.5em Georgia', fill:'#0095DD'});
+    var finalScoreTextFont = portrait ? '2.5em Georgia' : '3.5em Georgia';
+    var finalScoreText = game.add.text(game.world.centerX, game.world.centerY + (game.world.height * .25), 'Final Score: ' + score, {font: finalScoreTextFont, fill:'#0095DD'});
     finalScoreText.anchor.set(0.5);
 
-    var continueText = game.add.text(game.world.centerX, game.world.height -50, "Touch the screen to play again...", {font:'1.5em Georgia', fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.65 });
+    var continueTextFont = portrait ? '1.5em Georgia' : '3em Georgia';
+    var continueText = game.add.text(game.world.centerX, game.world.height -50, "Touch the screen to play again...", {font: continueTextFont, fill: '#0095DD',wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
   },
@@ -784,9 +770,13 @@ var loseState = {
   create: function() {
     console.log('loseState');
     game.stage.backgroundColor = 0x000000;
-    var instructionsText = game.add.text(game.world.centerX, game.world.centerY, "GAME OVER", {font:'2.5em Georgia',fill:'#0095DD'});
+
+    var instructionsTextFont = portrait ? '2.5em Georgia' : '4em Georgia';
+    var instructionsText = game.add.text(game.world.centerX, game.world.centerY, "GAME OVER", {font: instructionsTextFont, fill:'#0095DD'});
     instructionsText.anchor.set(0.5);
-    var continueText = game.add.text(game.world.centerX, game.world.height - 50, "Touch the screen to play again...", {font:'1.5em Georgia',fill:'#0095DD', wordWrap: true, wordWrapWidth:width*.65});
+
+    var continueTextFont = portrait ? '1.5em Georgia' : '3em Georgia';
+    var continueText = game.add.text(game.world.centerX, game.world.height - 50, "Touch the screen to play again...", {font: continueTextFont, fill:'#0095DD', wordWrap: true, wordWrapWidth:width*.65});
     continueText.anchor.set(0.5);  
       game.input.onTap.addOnce(this.start, this);
   },
