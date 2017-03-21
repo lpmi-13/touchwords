@@ -32,6 +32,7 @@ var scorePool;
 var bonusScorePool;
 var deletePool;
 var deleteButton;
+var clearLeftButton;
 var heartPool;
 var clickedArray = [];
 var consonantArray = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'];
@@ -280,7 +281,8 @@ var loadState = {
 
     game.load.image('heart', 'static/touchwords/assets/images/Heart.png');
     game.load.image('button', 'static/touchwords/assets/images/roundedColoredButton.png');
-    game.load.image('deleteButton', 'static/touchwords/assets/images/deleteButton.png');
+    game.load.image('deleteButton', 'static/touchwords/assets/images/clear.png');
+    game.load.image('clearLeftButton', 'static/touchwords/assets/images/left.png');
     game.load.bitmapFont('digitalFont', 'static/touchwords/assets/fonts/font.png', 'static/touchwords/assets/fonts/font.fnt');
     game.load.image('level1Background', 'static/touchwords/assets/images/voodoo_cactus_island_scaled.png');
     game.load.image('level2Background', 'static/touchwords/assets/images/fishbgexp_scaled.jpg');
@@ -564,7 +566,14 @@ var bonusState = {
     deleteButton.scale.set(buttonScaleX,buttonScaleY);
     deleteButton.events.onInputDown.add(deleteLetter,this);
 
+    clearLeftButton = game.add.sprite(game.world.width - screenGutterWidth, (game.world.height * .9) - elementHeight, 'clearLeftButton');
+    clearLeftButton.inputEnabled = true;
+    clearLeftButton.anchor.set(0.5);
+    clearLeftButton.scale.set(buttonScaleX, buttonScaleY);
+    clearLeftButton.events.onInputDown.add(deleteLetter,this);
+
     deletePool.add(deleteButton);
+    deletePool.add(clearLeftButton);
 
   var rectangleWidth = portrait ? game.world.width * .85 : game.world.width * .65;
   var rectangleHeight = game.world.height * .15;
@@ -600,6 +609,7 @@ var bonusState = {
           promptText.setText('');
 	  buttonPool.setAll('inputEnabled', false);
 	  deleteButton.inputEnabled = false;
+	  clearLeftButton.inputEnabled = false;
 	  stopClockCountPointsFinal();
         } else if (bonusCount == clickedArray.length) {
           clickedArray = [];
@@ -608,6 +618,7 @@ var bonusState = {
           promptText.setText('');
 	  buttonPool.setAll('inputEnabled', false);
 	  deleteButton.inputEnabled = false;
+	  clearLeftButton.inputEnabled = false;
 	  stopClockCountPoints();
         } else {
           clearScreen();
