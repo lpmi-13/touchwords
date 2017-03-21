@@ -524,7 +524,7 @@ var bonusState = {
       var shuffledWord = shuffle(mixedArray);
 
       var promptFontSize = portrait ? '3em Georgia' : '5em Georgia';
-      var correctionFontsize = portrait ? '3.25em Georgia' : '6em Georgia';
+      var correctionFontSize = portrait ? '3.25em Georgia' : '6em Georgia';
 
       promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: promptFontSize, fill: '#dc9a41'});
     wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: correctionFontSize, fill :'#dc9a41'});
