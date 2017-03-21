@@ -62,8 +62,9 @@ logAllThings();
 background.tileScale.x = resizeX;
 background.tileScale.y = resizeY;
 
+  var scoreFontSize = portrait ? '2.8em Georgia' : '3.5em Georgia';
 
-  scoreText = game.add.text(5, 5, 'Points: '+ score, {font: '2.8em Georgia', fill: '#0095DD'});
+  scoreText = game.add.text(5, 5, 'Points: '+ score, {font: scoreFontSize, fill: '#0095DD'});
 
   heartPool = game.add.group();
 
@@ -128,11 +129,9 @@ background.tileScale.y = resizeY;
 	return number;
         })();
 
-	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: "3em Arial Black", fill: "#c51b7d"}, wordPool);
+        var wordFontSize = portrait ? '3em Arial Black' : '4.5em Arial Black';
 
-	console.log('random number is ' + randomNumber);
-	console.log('word = ' + words[randomNumber]);
-	console.log('wordsArray is ' + wordsArray);
+	var word = game.add.text(game.world.randomX, game.world.height, words[randomNumber], { font: wordFontSize, fill: "#c51b7d"}, wordPool);
 
 	wordsArray.push(randomNumber);
         if (wordsArray.length > 10) {
@@ -172,7 +171,6 @@ background.tileScale.y = resizeY;
   	  score += 10;
 	  scoreText.setText('Points: ' + score);
 	  progress += 1; 
-          //progressText.setText('Total: ' + progress + '/' + levelVars.progressTotal);
 	  if (progress == levelVars.progressTotal) {
 	      levelUpTransition();
 	  }
@@ -196,11 +194,9 @@ background.tileScale.y = resizeY;
   function levelUpTransition() {
     wordPool.callAll('kill');
 
-    if (portrait) {
-      levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: '2.5em Georgia',fill:'#0095DD'});
-    } else {
-      levelUpText = game.add.text(game.world.centerX,-150, 'You passed the level!!!',{font:'8em Georgia',fill:'#0095DD'});
-    }
+    var levelUpFontSize = portrait ? '2.5em Georgia' : '8em Georgia';
+
+    levelUpText = game.add.text(game.world.centerX, -150, 'You passed the level!!!', {font: levelUpFontSize,fill:'#0095DD'});
 
     levelUpText.anchor.set(0.5);
     var tweenTransition = game.add.tween(levelUpText).to( { y: game.world.centerY }, 4000, Phaser.Easing.Bounce.Out, true);
@@ -243,7 +239,7 @@ background.tileScale.y = resizeY;
       heartCount--;
       var heart = heartPool.getFirstAlive();
       heart.kill();
-     
+
       if (!heartCount) {
         startLoseFade();
       }
@@ -265,12 +261,12 @@ background.tileScale.y = resizeY;
 }
 
 function update() {
-  
+
 }
 
 
 var bootState = {
-  
+
   preload: function() {
     game.load.image('preloader', 'static/touchwords/assets/images/loading.png');
 
@@ -318,9 +314,8 @@ var loadState = {
       this.loadComplete();
     };
   },
-  loadComplete: function() { 
+  loadComplete: function() {
       game.state.start('splashScreen');
-//  }
   }
 };
 
@@ -354,7 +349,9 @@ var splashScreenState = {
       gameLogo.anchor.set(0.5);
     }
 
-    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: "1.6em Georgia", fill: '#0095DD'});
+    var touchFontSize = portrait ? '1.6em Georgia' : '3.2em Georgia';
+
+    var touchToStart = game.add.text(game.world.centerX, game.world.height - 35, 'touch the screen to start', {font: touchFontSize, fill: '#0095DD'});
     touchToStart.anchor.set(0.5);
 
     touchToStart.alpha = 1;
@@ -385,19 +382,18 @@ var instructionState = {
   
     game.scale.refresh();
 
-    var instructionsText = game.add.text(15,35, instructions, {font: '1.75em Georgia', fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
+    var instructionFontSize = portrait ? '1.75em Georgia' : '3.2em Georgia';
 
-    if (portrait){
-      var continueText = game.add.text(game.world.centerX, game.world.height - 25, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    } else { 
-      var continueText = game.add.text(game.world.centerX, game.world.height - 50, "touch the screen to continue...", {font: "1.5em Georgia", fill: '#0095DD'});
-      continueText.anchor.set(0.5);
-      game.input.onTap.addOnce(this.start, this);  
-    }
+    var instructionsText = game.add.text(15,35, instructions, {font: instructionFontSize, fill: '#0095DD', wordWrap: true, wordWrapWidth:game.world.width*.85 });
+
+    var continueFontSize = portrait ? '1.5em Georgia' : '3.2em Georgia';
+    var continueOffsetY = portait ? 25 : 50;
+
+    var continueText = game.add.text(game.world.centerX, game.world.height - continueOffsetY, "touch the screen to continue...", {font: contineFontSize, fill: '#0095DD'});
+    continueText.anchor.set(0.5);
+    game.input.onTap.addOnce(this.start, this);  
   },
-  
+
   start: function() {
     game.state.start('play');
   }
@@ -407,7 +403,6 @@ var instructionState = {
 var playState = {
   create: function() {
     console.log('Playstate');
-   // score = 0;
     progress = 0;   
  create();
   },
@@ -430,7 +425,6 @@ var bonusState = {
 
     var bonusScoreText = game.add.text(5, 5, 'Points: ', {font: '3em Georgia', fill: '#ffffff'});
     bonusScoreText.setText('Points: ' + score);
-//    bonusScoreText.anchor.set(1,1);
 
     game.levelData = JSON.parse(game.cache.getText('leveldata')); 
     var levelVars = game.levelData.levelVariables[level];
@@ -442,28 +436,25 @@ var bonusState = {
 
     function updateTimer() {
 
-      var currentTime = new Date();
-      var timeDifference = this.startTime.getTime() - currentTime.getTime();
+    var currentTime = new Date();
+    var timeDifference = this.startTime.getTime() - currentTime.getTime();
 
-      this.timeElapsed = Math.abs(timeDifference / 1000);
+    this.timeElapsed = Math.abs(timeDifference / 1000);
 
-      var timeRemaining = this.totalTime - this.timeElapsed;
-      minutes = Math.floor(timeRemaining / 60);
-      seconds = Math.floor(timeRemaining) - (60 * minutes);
+    var timeRemaining = this.totalTime - this.timeElapsed;
+    minutes = Math.floor(timeRemaining / 60);
+    seconds = Math.floor(timeRemaining) - (60 * minutes);
 
-//      console.log('time remaining is: ' + timeRemaining);
+    if (Math.floor(timeRemaining) == 0) {
+      timeExpired();
+    }
 
-      if (Math.floor(timeRemaining) == 0) {
-//	console.log('no time remaining');
-        timeExpired();
-      }
+    var result = (minutes < 10) ? '0' + minutes : minutes;
 
-      var result = (minutes < 10) ? '0' + minutes : minutes;
+    result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
 
-      result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
-
-      timeLabel.text = result;
-   }
+    timeLabel.text = result;
+ }
 
     function startBonusLossFade() {
       game.camera.fade(0x000000, 1500, true);
@@ -481,11 +472,8 @@ var bonusState = {
       var timeExpired = game.add.bitmapText(game.world.width - 5, 5, 'digitalFont', '00:00', timeExpiredFont);
       timeExpired.anchor.set(1, 0);
       timeExpired.fill = '#ffffff';
-//      startBonusLossFade();
-      
       buttonPool.callAll('kill');
       letterPool.callAll('kill');
-       console.log('destroy delete button');
       deletePool.callAll('kill');
       displaySpelling.setText('');
       wordToCorrect.setText('');
@@ -504,6 +492,8 @@ var bonusState = {
     buttonPool.enableBody = true;
     var letterPool = game.add.group();
     var numberOfRowElements = 6;
+
+    
 
     if (portrait) {
       var style = {font: '3.8em Arial', fill: '#000000', align: 'center'};
@@ -526,8 +516,6 @@ var bonusState = {
     }
 
     function renderBonusItem() {
-      console.log('the current count is: ' + bonusCount);
-      console.log(clickedArray.length);
       var displayItem = clickedArray[bonusCount].text;
       var displayArray = displayItem.split('');
       var answer = clickedArray[bonusCount].answer;
@@ -556,13 +544,10 @@ var bonusState = {
 
       var shuffledWord = shuffle(mixedArray);
 
-    if (portrait) {
-      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '3em Georgia', fill: '#dc9a41'});
-      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '3.25em Georgia', fill :'#dc9a41'});
-    } else {
-      promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: '5em Georgia', fill: '#dc9a41'});
-      wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: '6em Georgia', fill :'#dc9a41'});
-    }
+    var promptFontSize = portrait ? '3em Georgia' : '5em Georgia';    var correctionFontsize = portrait ? '3.25em Georgia' : '6em Georgia';
+
+    promptText = game.add.text(game.world.centerX, game.world.height * .2, 'correct this word: ', {font: promptFontSize, fill: '#dc9a41'});
+    wordToCorrect = game.add.text(game.world.centerX, game.world.height * .3, displayItem, {font: correctionFontSize, fill :'#dc9a41'});
 
       promptText.anchor.set(0.5);
       promptText.stroke = 'AA9239';
@@ -613,21 +598,15 @@ var bonusState = {
   inputRectangle.anchor.setTo(0.5,0.5);
 
   var spellText = "";
-
-  if (portrait) {
-    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"4em Georgia", fill: '#000000', align: 'center'});
-  } else {
-    displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font:"8em Georgia", fill: '#000000', align: 'center'});
-  }
+  var spellTextFontSize = portrait ? '4em Georgia' : '8em Georgia';
+  displaySpelling = game.add.text(game.world.centerX, game.world.centerY, spellText, {font: spellTextFontSize, fill: '#000000', align: 'center'});
 
     displaySpelling.anchor.set(0.5);
-
-    console.log('the level is: ' + level);
 
     function spellCheck(sprite,pointer) {
       if (spellText.length > 9 ) {
         return false;
-      }      
+      }
       spellText += sprite.data.letter;
       displaySpelling.setText(spellText);
       if (spellText == answer) {
@@ -649,7 +628,7 @@ var bonusState = {
           promptText.setText('');
 	  buttonPool.setAll('inputEnabled', false);
 	  stopClockCountPoints();
-        }  else {
+        } else {
           clearScreen();
           renderBonusItem();
         }
@@ -688,7 +667,6 @@ var bonusState = {
 	var totalPointsToAdd = totalSeconds * 10;
 	score += totalPointsToAdd;
  	bonusScoreText.setText('Points: ' + score);
-//	timeLabel.addColor('#2B4970', 0);
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
@@ -705,7 +683,6 @@ var bonusState = {
 	var totalPointsToAdd = totalSeconds + 10;
 	score += totalPointsToAdd;
 	bonusScoreText.setText('Points: ' + score);
-//        timeLabel.addColor('#2B4970');
 	destroyTimer();
         game.time.events.remove(gameTimer);
     }
@@ -751,7 +728,6 @@ var bonusState = {
   }
 
   renderBonusItem();
-//    game.input.onTap.addOnce(this.start, this);
   },
   createTimer: function() {
     var timeLabelFont = portrait ? 32 : 64;
@@ -769,9 +745,11 @@ var bonusState = {
 var progressState = {
   create: function() {
     level++;
-    console.log('LevelUp!!');
     game.stage.backgroundColor = 0x000000;
-    var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: '2.5em Georgia',fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
+
+    var continueTextFontSize = portrait ? '2.5em Georgia' : '4em Georgia';
+
+    var continueText = game.add.text(game.world.centerX, game.world.centerY, "Touch the screen to continue to the next level!!!", {font: continueTextFontSize,fill: '#0095DD', wordWrap: true, wordWrapWidth:width*.65 });
     continueText.anchor.set(0.5);
     game.input.onTap.addOnce(this.start, this);
   },
