@@ -12,7 +12,6 @@ function checkOrientation(width, height) {
   var game = new Phaser.Game(width * .8, height * heightMultiplier, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update});
 
 function preload() {
-  console.log('got to first preload');
 }
 
 var emitter;
@@ -101,9 +100,6 @@ function create() {
 
   var words = Object.keys(levelVars.verbs);
   var length = words.length;
-
-  console.log(wordInfo);
-  console.log(words);
 
   function createRandom() {
     return game.rnd.integerInRange(0, length - 1);
@@ -274,7 +270,6 @@ var bootState = {
 
 var loadState = {
   preload: function() {
-    console.log("loading assets");
 
     game.load.image('logo','static/touchwords/assets/images/logo.png');
     game.load.text('leveldata', 'static/touchwords/js/levels.json');
@@ -297,9 +292,7 @@ var loadState = {
 
   },
   loadUpdate: function() {
-    console.log('load update triggered');
     var progressAmount = game.load.progress;
-    console.log(game.load.progress);
     if (progressAmount === 100) {
       this.loadComplete();
     };
@@ -314,7 +307,6 @@ var splashScreenState = {
     preload();
   },
   create: function() {
-    console.log('splash screen state');
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -362,7 +354,6 @@ var instructionState = {
     preload();
   },
   create: function() {
-    console.log('instruction state');
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -392,7 +383,6 @@ var instructionState = {
 
 var playState = {
   create: function() {
-    console.log('Playstate');
     progress = 0;   
  create();
   },
@@ -403,8 +393,6 @@ var playState = {
 
 var bonusState = {
   create: function() {
-    console.log('bonus round!');
-    console.log(clickedArray);
     game.stage.backgroundColor = '#2B4970';
     var bonusCount = 0;
     var minutes;
@@ -695,9 +683,7 @@ var bonusState = {
     }
 
     function clearScreen() {
-      console.log('killing all buttons');
       buttonPool.callAll('kill');
-      console.log('killing all letters');
       letterPool.callAll('kill');
       displaySpelling.setText('');
       wordToCorrect.setText('');
@@ -758,7 +744,6 @@ var progressState = {
 
 var winState = {
   create: function() {
-    console.log('winState');
     game.stage.backgroundColor = 0x000000;
 
     var winTextFont = portrait ? '2.5em Georgia' : '4em Georgia';
@@ -784,7 +769,6 @@ var winState = {
 
 var loseState = {
   create: function() {
-    console.log('loseState');
     game.stage.backgroundColor = 0x000000;
 
     var instructionsTextFont = portrait ? '2.5em Georgia' : '4em Georgia';
