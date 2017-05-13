@@ -123,7 +123,7 @@
 			"teached":{"regular":false,"correction":"taught"},
 			"eated":{"regular":false,"correction":"ate"},
 			"singed":{"regular":false,"correction":"sang"},
-			"strike":{"regular":false,"correction":"struck"},
+			"striked":{"regular":false,"correction":"struck"},
 			"shaked":{"regular":false,"correction":"shook"},
 			"applied":{"regular":true},
 			"avoided":{"regular":true},
