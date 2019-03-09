@@ -1,0 +1,26 @@
+{
+  "name": "touchwords",
+  "version": "1.0.0",
+  "description": "a micromaterial to help work on revising verbs",
+  "main": "src/js/index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --hot --mode development --config ./webpack.config.js",
+    "build": "webpack --mode production --config ./webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lpmi-13/touchwords.git"
+  },
+  "author": "Adam Leskis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lpmi-13/touchwords/issues"
+  },
+  "homepage": "https://github.com/lpmi-13/touchwords#readme",
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
