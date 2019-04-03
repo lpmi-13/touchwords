@@ -4,6 +4,7 @@
   "description": "a simple game to practice correcting incorrect verb forms",
   "main": "index.js",
   "scripts": {
+    "build": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
