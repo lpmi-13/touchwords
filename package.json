@@ -19,8 +19,6 @@
   "homepage": "https://github.com/lpmi-13/touchwords#readme",
   "devDependencies": {
     "gulp": "^4.0.0",
-    "gulp-minify": "^3.1.0",
-    "gulp-rename": "^1.4.0",
     "gulp-strip-debug": "^3.0.0",
     "gulp-uglify": "^3.0.2"
   }
