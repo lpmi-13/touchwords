@@ -4,6 +4,18 @@
         <title>Touchwords</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+        <meta name="description" content="a game to help learners identify mistakes in simple past tense verbs">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+        </script>
         <script src="/dist/phaser.arcade.min.js"></script>
         <script src="/dist/game.js"></script>
 	<script src="/dist/instructions.js"></script>
