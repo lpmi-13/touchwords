@@ -9,7 +9,7 @@
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('https://grammarbuffet.org/touchwords/sw.js', {scope: '/'}).then(function(registration) {
+                    navigator.serviceWorker.register('https://grammarbuffet.org/touchwords/sw.js', {scope: 'https://grammarbuffet.org/touchwords/'}).then(function(registration) {
                         console.log('ServiceWorker registration successful with scope: ', registration.scope);
                     }, function(err) {
                         console.log('ServiceWorker registration failed: ', err);
