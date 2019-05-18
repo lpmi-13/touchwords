@@ -1,1 +1,0 @@
-function shuffle(r){for(var n,t,f=r.length;0!==f;)t=Math.floor(Math.random()*f),n=r[f-=1],r[f]=r[t],r[t]=n;return r}function unique(r){for(var n={},t=[],f=r.length,o=0,u=0;u<f;u++){var a=r[u];1!==n[a]&&(n[a]=1,t[o++]=a)}return t}
