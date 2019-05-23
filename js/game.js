@@ -337,7 +337,7 @@ var loadState = {
     game.load.image('heart', BASE_FILE_PATH + 'assets/images/Heart.png');
     game.load.image('button', BASE_FILE_PATH + 'assets/images/roundedColoredButton.png');
     game.load.image('deleteButton', BASE_FILE_PATH + 'assets/images/deleteButton.png');
-    game.load.bitmapFont('digitalFont', BASE_FILE_PATH + 'assets/fonts/font.png', 'assets/fonts/font.fnt');
+    game.load.bitmapFont('digitalFont', BASE_FILE_PATH + 'assets/fonts/font.png', BASE_FILE_PATH + 'assets/fonts/font.fnt');
     game.load.image('level1Background', BASE_FILE_PATH + 'assets/images/voodoo_cactus_island_scaled.jpg');
     game.load.image('level2Background', BASE_FILE_PATH + 'assets/images/fishbgexp_scaled.jpg');
     game.load.image('level3Background', BASE_FILE_PATH + 'assets/images/cloudsinthedesert_scaled.jpg');
