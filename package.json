@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp",
+    "build-prod": "NODE_ENV='production' gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,8 +18,10 @@
     "url": "https://github.com/lpmi-13/touchwords/issues"
   },
   "homepage": "https://github.com/lpmi-13/touchwords#readme",
-  "devDependencies": {
+  "dependencies": {
     "gulp": "^4.0.0",
+    "gulp-inject-string": "^1.1.2",
+    "gulp-rename": "^1.4.0",
     "gulp-strip-debug": "^3.0.0",
     "gulp-uglify": "^3.0.2"
   }
