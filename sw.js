@@ -1,8 +1,9 @@
 var cacheName = 'phaser-v4';
+var BASE_FILE_PATH = './';
 var filesToCache = [
-  '/',
-  '/favicon.ico',
-  '/index.html',
+  BASE_FILE_PATH,
+  BASE_FILE_PATH + 'favicon.ico',
+  BASE_FILE_PATH + 'index.html',
 ];
 
 self.addEventListener('install', function(event) {

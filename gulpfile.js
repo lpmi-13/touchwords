@@ -3,6 +3,7 @@ const inject = require('gulp-inject-string');
 const minify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const stripDebug = require('gulp-strip-debug');
+const webserver = require('gulp-webserver');
 
 var buildTargetUrlPath = process.env.BUILD_TARGET_URL_PATH || './';
 
@@ -16,6 +17,17 @@ gulp.task('miniJS', done => {
     .pipe(minify())
     .pipe(stripDebug())
     .pipe(gulp.dest('dist/'))
+  done();
+});
+
+gulp.task('injectSWPath', done => {
+  gulp.src('./sw-template.js')
+    .pipe(inject.replace(
+      'BASE_FILE_PATH = \'./\'',
+      `BASE_FILE_PATH = '${buildTargetUrlPath}'`
+    ))
+    .pipe(rename('./sw.js'))
+    .pipe(gulp.dest('./'))
   done();
 });
 
@@ -46,8 +58,30 @@ gulp.task('injectHTMLSrc', done => {
   done();
 });
 
+gulp.task('serve', () => {
+  gulp.src('./')
+    .pipe(webserver({
+      livereload: true,
+      open: true
+    }))
+});
+
+gulp.task('watch', () => {
+  gulp.watch('js/**', gulp.series('miniJS')),
+  gulp.watch('./*.html', gulp.series('injectHTMLSrc')),
+  gulp.watch('./sw.js', gulp.series('injectSWPath'));
+  return
+});
+
+gulp.task('dev', gulp.parallel(
+  'serve',
+  'watch'
+  )
+);
+
 gulp.task('default', gulp.parallel(
   'miniJS',
-  'injectHTMLSrc'
+  'injectHTMLSrc',
+  'injectSWPath'
   )
 );
