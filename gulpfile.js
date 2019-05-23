@@ -31,6 +31,11 @@ gulp.task('injectHTMLSrc', done => {
       'href="./',
       `href="${buildTargetUrlPath}`
      ))
+    // replace file path for service worker
+    .pipe(inject.replace(
+      './sw.js',
+      `${buildTargetUrlPath}sw.js`
+     ))
     .pipe(rename('index.html'))
     .pipe(gulp.dest('./'))
   done();
