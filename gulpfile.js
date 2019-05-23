@@ -36,6 +36,11 @@ gulp.task('injectHTMLSrc', done => {
       './sw.js',
       `${buildTargetUrlPath}sw.js`
      ))
+    // replace default scope for service worker
+    .pipe(inject.replace(
+      'scope: \'/\'',
+      `scope: '${buildTargetUrlPath}'`
+    ))
     .pipe(rename('index.html'))
     .pipe(gulp.dest('./'))
   done();
