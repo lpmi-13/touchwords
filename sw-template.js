@@ -1,7 +1,6 @@
 var cacheName = 'phaser-v5';
 var BASE_FILE_PATH = './';
 var filesToCache = [
-  BASE_FILE_PATH,
   BASE_FILE_PATH + 'favicon.ico',
   BASE_FILE_PATH + 'index.html',
 ];
