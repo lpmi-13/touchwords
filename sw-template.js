@@ -1,4 +1,7 @@
-var cacheName = 'phaser-v5';
+var cachePrefix = 'touchwords';
+var cacheVersion = 'v1';
+var cacheName = `${cachePrefix}-${cacheVersion}`;
+
 var BASE_FILE_PATH = './';
 var filesToCache = [
   BASE_FILE_PATH + 'favicon.ico',
@@ -44,7 +47,7 @@ self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keyList) {
       return Promise.all(keyList.map(function(key) {
-        if (key !== cacheName) {
+        if (key.startsWith(`{cachePrefix}`) && key !== cacheName) {
           console.log('sw removing old cache', key);
           return caches.delete(key);
         }
