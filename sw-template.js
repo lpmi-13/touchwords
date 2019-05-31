@@ -1,11 +1,12 @@
 var cachePrefix = 'touchwords';
-var cacheVersion = 'v1';
+var cacheVersion = 'v2';
 var cacheName = `${cachePrefix}-${cacheVersion}`;
 
 var BASE_FILE_PATH = './';
 var filesToCache = [
   BASE_FILE_PATH + 'favicon.ico',
   BASE_FILE_PATH + 'index.html',
+  BASE_FILE_PATH + '404.html',
 ];
 
 self.addEventListener('install', function(event) {
@@ -14,8 +15,9 @@ self.addEventListener('install', function(event) {
       return cache.addAll(filesToCache);
     }).catch(function(err) {
       console.log(err);
-    })
-  );
+    }).then(function() {
+      return self.skipWaiting();
+    }));
 });
 
 self.addEventListener('fetch', function(event) {
