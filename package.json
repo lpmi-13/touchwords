@@ -1,6 +1,6 @@
 {
   "name": "touchwords",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a simple game to practice correcting incorrect verb forms",
   "main": "index.js",
   "scripts": {
@@ -24,5 +24,8 @@
     "gulp-rename": "^1.4.0",
     "gulp-strip-debug": "^3.0.0",
     "gulp-uglify": "^3.0.2"
+  },
+  "devDependencies": {
+    "gulp-webserver": "^0.9.1"
   }
 }
