@@ -1,18 +1,38 @@
-![touchwords logo](assets/images/logo.png)
+# Touchwords
 
-A simple visual game to target sensitivity to incorrect overgeneralizations of past tense inflections in verbs. Tap the incorrect forms to gain points, but don't tap the correct forms, or you lose one of your lives. If you lose all three lives, then the game is over.
+![Touchwords game](assets/images/touchwords-screenshot.png)
 
-During the regular round, irregular verbs are worth 10 points, but in the bonus round, correcting the incorrect irregular forms is worth 50 points. Extra points are also given for completing the bonus round with time remaining.
+Touchwords is a visual game for practising irregular past-tense verb forms. Select an incorrectly regularised verb to earn points, but avoid genuine regular verbs or you will lose a heart. Each level ends with a timed correction round.
 
-## install and build
-`npm install`
-then
-`gulp`
+## Development
 
-if you want to build for a particular redirected subdomain (eg,
-from netlify), pass the following at build time
-`BUILD_TARGET_URL_PATH=PATHHERE`
+The project requires Node.js 20.19 or newer.
 
-for example, this game is currently hosted at https://www.grammarbuffet.org/touchwords (which is a redirect from the host), so
-the full build command for that would be:
-`BUILD_TARGET_URL_PATH=/touchwords/ npm run build-prod`
+```sh
+npm ci
+npm run dev
+```
+
+Useful checks:
+
+```sh
+npm run lint
+npm test
+npm run build
+```
+
+`npm run build` creates the deployable static site in `dist/`. The generated service worker makes the built game available offline after its first successful load.
+
+For a deployment below a URL prefix, keep using `BUILD_TARGET_URL_PATH`:
+
+```sh
+BUILD_TARGET_URL_PATH=/touchwords/ npm run build
+```
+
+## Structure
+
+- `src/game/` contains framework-independent game state, random selection, and word movement.
+- `src/screens/` contains the individual UI screens.
+- `src/data/levels.js` exposes the existing level data from `js/levels.json`.
+- `src/styles.css` owns responsive layout and device-specific input hints.
+- `tests/` covers scoring, lives, progression, and random selection.
