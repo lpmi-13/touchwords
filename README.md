@@ -23,6 +23,8 @@ npm run build
 
 `npm run build` creates the deployable static site in `dist/`. The generated service worker makes the built game available offline after its first successful load.
 
+Netlify reads `netlify.toml`, runs the production build, and publishes only `dist/`. No build or publish-directory settings need to be duplicated in the Netlify dashboard.
+
 For a deployment below a URL prefix, keep using `BUILD_TARGET_URL_PATH`:
 
 ```sh
