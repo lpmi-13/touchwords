@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Touchwords icon">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#35d0ff" />
+      <stop offset="1" stop-color="#10223d" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)" />
+  <path d="M16 19h32v9H37v24H27V28H16z" fill="#fff8d6" />
+  <circle cx="48" cy="46" r="7" fill="#ffcf4a" stroke="#10223d" stroke-width="4" />
+</svg>
