@@ -1,6 +1,5 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
 
 function normaliseBase(value) {
   if (!value || value === './') return './';
@@ -18,15 +17,4 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    VitePWA({
-      registerType: 'autoUpdate',
-      injectRegister: 'auto',
-      manifest: false,
-      workbox: {
-        cleanupOutdatedCaches: true,
-        globPatterns: ['**/*.{html,js,css,ico,png,jpg,fnt}'],
-      },
-    }),
-  ],
 });
