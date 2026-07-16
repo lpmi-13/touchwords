@@ -243,7 +243,14 @@ body {
     2px 3px 3px rgb(0 0 0 / 55%);
   white-space: nowrap;
   cursor: pointer;
+  touch-action: none;
   will-change: transform;
+}
+
+.floating-word::before {
+  position: absolute;
+  inset: -0.65rem -0.75rem;
+  content: "";
 }
 
 .floating-word:disabled {
@@ -251,7 +258,8 @@ body {
 }
 
 .floating-word--collected {
-  animation: collect-word 360ms ease-out forwards;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .play-screen--mistake {
@@ -451,10 +459,6 @@ body {
 @keyframes logo-in {
   from { opacity: 0; transform: scale(0.85) rotate(-2deg); }
   to { opacity: 1; transform: scale(1) rotate(0); }
-}
-
-@keyframes collect-word {
-  to { opacity: 0; scale: 1.7; filter: blur(0.2rem); }
 }
 
 @keyframes mistake {

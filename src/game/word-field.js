@@ -61,10 +61,28 @@ export class WordField {
       removing: false,
     };
 
-    element.addEventListener('click', () => {
+    let pointerHandled = false;
+    const select = () => {
       if (word.removing) return;
       const result = this.onSelect(text, data, element);
       if (result.correct) this.#collect(word);
+    };
+
+    element.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      pointerHandled = true;
+      window.setTimeout(() => {
+        pointerHandled = false;
+      }, 400);
+      select();
+    });
+    element.addEventListener('click', () => {
+      if (pointerHandled) {
+        pointerHandled = false;
+        return;
+      }
+
+      select();
     });
 
     this.#words.add(word);
