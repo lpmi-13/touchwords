@@ -9,6 +9,7 @@ function normaliseBase(value) {
 
 export default defineConfig({
   base: normaliseBase(process.env.BUILD_TARGET_URL_PATH),
+  publicDir: 'static',
   build: {
     rollupOptions: {
       input: {

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Touchwords</title>
+  <desc id="description">Spot it. Tap it. Fix it. Practise irregular past-tense verbs.</desc>
+  <defs>
+    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#07111f" stop-opacity=".82"/>
+      <stop offset=".57" stop-color="#07111f" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#07111f" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10223d" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#07111f" stop-opacity=".92"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#07111f" flood-opacity=".38"/>
+    </filter>
+  </defs>
+
+  <image xlink:href="voodoo_cactus_island_scaled.jpg" x="0" y="-135" width="1200" height="900" preserveAspectRatio="xMidYMid slice"/>
+  <rect width="1200" height="630" fill="url(#shade)"/>
+
+  <g transform="translate(58 45)" filter="url(#shadow)">
+    <rect width="620" height="520" rx="28" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".2"/>
+
+    <g transform="translate(36 32)">
+      <path d="M6 20 18 2l24 8L60 0l20 14 26-6-4 23 11 20-17 15 5 24-25-4-18 14-17-16-25 5 5-25L0 47l14-13z" fill="#ff3f6c"/>
+      <text x="56" y="55" text-anchor="middle" fill="#07111f" font-family="Lato,Arial,sans-serif" font-size="21" font-weight="900">TW</text>
+      <text x="132" y="43" fill="#ffffff" font-family="Lato,Arial,sans-serif" font-size="26" font-weight="900" letter-spacing="1.2">TOUCHWORDS</text>
+    </g>
+
+    <g transform="translate(36 158)">
+      <rect width="284" height="34" rx="4" fill="#60d9e9"/>
+      <text x="16" y="23" fill="#07111f" font-family="Lato,Arial,sans-serif" font-size="13" font-weight="900" letter-spacing="2.5">IRREGULAR VERB GAME</text>
+
+      <text x="0" y="104" fill="#ffffff" font-family="Lato,Arial,sans-serif" font-size="54" font-weight="900">Spot it. Tap it.</text>
+      <text x="0" y="166" fill="#ff3f6c" font-family="Lato,Arial,sans-serif" font-size="58" font-weight="900" font-style="italic">Fix it.</text>
+      <text x="3" y="215" fill="#d8f9ff" font-family="Lato,Arial,sans-serif" font-size="21">Catch false past tenses before they drift away.</text>
+
+      <g transform="translate(0 254)" font-family="Lato,Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="1.4">
+        <rect width="152" height="44" rx="22" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".2"/>
+        <text x="76" y="28" text-anchor="middle" fill="#b9f6ff">SPOT THE WORD</text>
+        <rect x="164" width="138" height="44" rx="22" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".2"/>
+        <text x="233" y="28" text-anchor="middle" fill="#b9f6ff">BUILD A STREAK</text>
+      </g>
+    </g>
+  </g>
+
+  <g font-family="Lato,Arial,sans-serif" filter="url(#shadow)">
+    <g transform="translate(813 96) rotate(-4)">
+      <rect width="162" height="64" rx="16" fill="#ffffff" fill-opacity=".94"/>
+      <text x="81" y="43" text-anchor="middle" fill="#7d1748" font-size="30" font-weight="800">fixed</text>
+    </g>
+    <g transform="translate(929 190) rotate(4)">
+      <rect width="182" height="76" rx="18" fill="#10223d" fill-opacity=".93" stroke="#ff3f6c" stroke-width="5"/>
+      <text x="91" y="50" text-anchor="middle" fill="#ff78a0" font-size="34" font-weight="900">taked</text>
+      <circle cx="166" cy="66" r="22" fill="#60d9e9" stroke="#07111f" stroke-width="5"/>
+      <path d="m158 52 19 17-11 1-4 10z" fill="#07111f"/>
+    </g>
+    <g transform="translate(753 306) rotate(-3)">
+      <rect width="168" height="64" rx="16" fill="#ffffff" fill-opacity=".94"/>
+      <text x="84" y="43" text-anchor="middle" fill="#7d1748" font-size="30" font-weight="800">played</text>
+    </g>
+
+    <g transform="translate(757 414)" filter="url(#shadow)">
+      <rect width="380" height="122" rx="22" fill="#10223d" fill-opacity=".94" stroke="#ffffff" stroke-opacity=".25"/>
+      <circle cx="28" cy="29" r="6" fill="#60d9e9"/>
+      <text x="45" y="34" fill="#b9f6ff" font-size="12" font-weight="900" letter-spacing="2.4">YOU FOUND IT</text>
+      <line x1="24" y1="53" x2="356" y2="53" stroke="#ffffff" stroke-opacity=".18"/>
+      <text x="28" y="93" fill="#ff78a0" font-size="26" font-weight="900">taked</text>
+      <text x="124" y="93" fill="#ffffff" fill-opacity=".7" font-size="25">→</text>
+      <text x="170" y="93" fill="#ffffff" font-size="29" font-weight="900">took</text>
+      <text x="350" y="91" text-anchor="end" fill="#60d9e9" font-size="15" font-weight="900">+10</text>
+    </g>
+  </g>
+
+  <rect y="585" width="1200" height="45" fill="#ff3f6c"/>
+  <text x="600" y="614" text-anchor="middle" fill="#07111f" font-family="Lato,Arial,sans-serif" font-size="14" font-weight="900" letter-spacing="3.2">IRREGULAR PAST TENSE  ◆  FAST, FOCUSED PRACTICE</text>
+</svg>
